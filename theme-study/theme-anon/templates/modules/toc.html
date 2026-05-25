@@ -1,0 +1,19 @@
+<div th:fragment="toc(post)" class="toc-container sticky" id="post-toc" xmlns:th="http://www.thymeleaf.org">
+  <div class="toc-box">
+    <h6 class="font-title text-sm text-secondary px-3 mb-2" th:text="#{page.post.toc}">Table of Contents</h6>
+    <div class="post-toc">
+      <ul class="toc-list" id="toc-list">
+        <li th:each="heading : ${post.content.toc}" th:class="'toc-level-' + ${heading.level}">
+          <a th:href="'#' + ${heading.id}" th:text="${heading.text}" class="toc-link"></a>
+          <th:block th:if="${!heading.children.isEmpty()}">
+            <ul class="toc-list is-collapsible">
+              <li th:each="child : ${heading.children}" th:class="'toc-level-' + ${child.level}">
+                <a th:href="'#' + ${child.id}" th:text="${child.text}" class="toc-link"></a>
+              </li>
+            </ul>
+          </th:block>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

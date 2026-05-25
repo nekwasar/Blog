@@ -1,0 +1,114 @@
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"/>
+  <meta name="robots" content="index,follow"/>
+  <meta property="og:site_name" th:content="${site.title}"/>
+  <meta name="description" th:content="#{common.tags} + ' - ' + ${site.title}"/>
+  <meta property="og:title" th:content="|#{common.tags} - ${site.title}|"/>
+  <meta property="og:description" th:content="#{common.tags} + ' - ' + ${site.title}"/>
+  <meta property="og:url" th:content="@{/tags}"/>
+  <link rel="alternate" th:href="@{/rss.xml}" type="application/rss+xml" th:title="${site.title}"/>
+  <link rel="icon" type="image/png" th:if="${site.favicon}" th:href="${site.favicon}"/>
+  <title th:text="|#{common.tags} - ${site.title}|">Tags</title>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/bootstrap/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/fancybox/fancybox.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/aos/aos.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/iconfont/iconfont.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/animate.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/reset.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/style.css"/>
+  <style>[data-lucide]{width:1.2em;height:1.2em;stroke-width:1.5;flex-shrink:0}[data-lucide].text-lg{width:1.4em;height:1.4em}[data-lucide].text-md{width:1.1em;height:1.1em}[data-lucide].text-xs{width:0.9em;height:0.9em}</style>
+</head>
+<body class="hidden no-transition">
+  <th:block th:replace="~{modules/header :: header}"/>
+  <main class="site-main h-v-75">
+    <div class="container">
+      <div class="row g-3">
+        <aside class="sidebar-left col-md-4 col-xl-3 d-none d-md-block">
+          <div class="box-block block w-100 mb-3 text-center">
+            <a th:href="@{/authors/{name}(name=${site.title})}">
+              <img th:src="${site.logo}" th:alt="${site.title}" class="flex-avatar w-80 mx-auto d-block"/>
+            </a>
+            <h3 class="profile-name font-title mt-3 mb-1">
+              <a th:href="@{/authors/{name}(name=${site.title})}" th:text="${site.title}">Author Name</a>
+            </h3>
+            <p class="text-secondary text-sm mt-1" th:text="${site.subtitle ?: ''}">Subtitle</p>
+          </div>
+          <div class="data-block mt-3 mb-3">
+            <div class="row g-2 g-lg-3" th:with="stats=${siteStatsFinder.getStats()}">
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.post ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.posts}">Posts</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.comment ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.comments}">Comments</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.upvote ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.upvotes}">Upvotes</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.visit ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.visits}">Visits</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="social-block box-block block d-none d-md-block w-100 mb-3">
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+              <a th:each="item : ${theme.config.footer.social_media}" th:if="${item.url != null && !item.url.isEmpty()}"
+                 th:href="${item.url}" target="_blank" rel="noopener" class="btn btn-light btn-icon btn-sm btn-rounded">
+                <i th:class="'iconfont ' + ${item.icon}"></i>
+              </a>
+            </div>
+          </div>
+        </aside>
+        <div class="col-md-8 col-xl-6">
+          <div class="box-block block w-100 mb-3">
+            <h1 class="font-title text-xl mb-0" th:text="#{common.tags}">Tags</h1>
+          </div>
+          <div th:with="tags=${tagFinder.listAll()}">
+            <div class="tags-block box-block block w-100 mb-3" th:if="${!tags.isEmpty()}">
+              <div class="tags-list d-flex flex-wrap gap-2">
+                <a th:each="tag : ${tags}" th:href="@{/tags/{name}(name=${tag.metadata.name})}"
+                   class="istag text-sm" th:text="'# ' + ${tag.spec.displayName}">#tag</a>
+              </div>
+            </div>
+            <div th:if="${tags.isEmpty()}" class="text-center py-5">
+              <div class="text-secondary h3" th:text="#{common.noPosts}">No tags found</div>
+            </div>
+          </div>
+        </div>
+        <aside class="sidebar-right col-xl-3 d-none d-xl-block">
+          <div th:replace="~{modules/sidebar :: sidebar}"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <th:block th:replace="~{modules/footer :: footer}"/>
+  <script src="/themes/theme-anon/assets/js/jquery.min.js"></script>
+  <script defer src="/themes/theme-anon/assets/js/alpine.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/aos/aos.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/fancybox/fancybox.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/ResizeSensor.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+  <script src="/themes/theme-anon/assets/js/nicetheme.js"></script>
+  <script>AOS.init();</script>
+  <div class="scroll-toolbar"><div class="scroll-backtotop" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(180,185,200,0.85);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%) saturate(140%);border:1px solid rgba(0,0,0,0.06);border-radius:50%;cursor:pointer;transition:all 0.3s ease"><i data-lucide="arrow-up"></i></div></div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

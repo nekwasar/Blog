@@ -1,0 +1,16 @@
+<div th:fragment="announcement(text)" xmlns:th="http://www.thymeleaf.org"
+     th:if="${text != null and !text.isEmpty()}"
+     x-data="{ dismissed: false }"
+     x-show="!dismissed"
+     class="announcement-block box-block block d-flex align-items-center justify-content-center flex-column w-100 mb-3">
+  <div class="announcement-inner d-flex align-items-center w-100">
+    <span class="d-flex align-items-center mr-2 flex-shrink-0">
+      <i data-lucide="info" class="text-warning text-md"></i>
+    </span>
+    <span class="text-sm text-secondary flex-grow-1" th:text="${text}"></span>
+    <button type="button" class="btn btn-icon btn-xs btn-link text-secondary flex-shrink-0 ml-2"
+            @click="dismissed = true" aria-label="Close">
+      <i data-lucide="x"></i>
+    </button>
+  </div>
+</div>

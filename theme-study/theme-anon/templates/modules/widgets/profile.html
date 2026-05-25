@@ -1,0 +1,41 @@
+<div th:fragment="widget" class="box-block block w-100 mb-3 text-center" xmlns:th="http://www.thymeleaf.org">
+  <img th:if="${site.logo}"
+       th:src="${site.logo}"
+       class="flex-avatar w-80 mx-auto d-block"
+       th:alt="${site.title}"/>
+  <div th:unless="${site.logo}" class="flex-avatar w-80 mx-auto d-block">
+    <i data-lucide="user" class="text-secondary" style="font-size:48px;"></i>
+  </div>
+  <h4 class="profile-name font-title mt-3 mb-1">
+    <a th:href="@{/authors/{name}(name=${site.title})}" th:text="${site.title}">Author Name</a>
+  </h4>
+  <p class="text-secondary text-sm mt-1" th:text="${site.subtitle ?: ''}">Subtitle</p>
+  <div class="data-block mt-3 mb-3" th:with="stats=${siteStatsFinder.getStats()}">
+    <div class="row g-2 g-lg-3">
+      <div class="col-6">
+        <div class="item box-block nopd-block block text-center py-2">
+          <div class="font-number text-xxl lh-1" th:text="${stats.post ?: 0}">0</div>
+          <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.posts}">Posts</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="item box-block nopd-block block text-center py-2">
+          <div class="font-number text-xxl lh-1" th:text="${stats.comment ?: 0}">0</div>
+          <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.comments}">Comments</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="item box-block nopd-block block text-center py-2">
+          <div class="font-number text-xxl lh-1" th:text="${stats.upvote ?: 0}">0</div>
+          <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.upvotes}">Upvotes</div>
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="item box-block nopd-block block text-center py-2">
+          <div class="font-number text-xxl lh-1" th:text="${stats.visit ?: 0}">0</div>
+          <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.visits}">Visits</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

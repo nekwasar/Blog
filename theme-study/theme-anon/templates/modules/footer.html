@@ -1,0 +1,16 @@
+<footer th:fragment="footer" xmlns:th="http://www.thymeleaf.org">
+    <div class="site-footer text-muted text-center py-4 py-md-5" style="position:relative;font-size:0.95rem;letter-spacing:0.02em">
+        <div class="container">
+            <div class="mb-3">
+                <th:block th:replace="~{modules/footer-social :: footerSocial}"></th:block>
+            </div>
+            <div class="mb-2">
+                &copy; <span th:text="${#dates.format(new java.util.Date().getTime(), 'yyyy')}">2026</span>
+                <a href="/" th:text="${site.title}" style="color:inherit">Nekwasar blog</a>. All Rights Reserved.
+            </div>
+            <div th:if="${!#strings.isEmpty(theme.config.beian.icp_text)}" class="mt-2" style="font-size:0.85rem">
+                <a th:href="${theme.config.beian.icp_link}" target="_blank" style="color:inherit;opacity:0.7" th:text="${theme.config.beian.icp_text}">ICP</a>
+            </div>
+        </div>
+    </div>
+</footer>

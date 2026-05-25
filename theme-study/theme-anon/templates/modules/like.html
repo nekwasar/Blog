@@ -1,0 +1,43 @@
+<div th:fragment="like(post)" class="action-button like-action" xmlns:th="http://www.thymeleaf.org"
+     x-data="{
+       liked: false,
+       count: 0,
+       postName: '',
+       init() {
+         this.count = parseInt('0') || 0;
+         this.postName = '';
+         this.liked = this.getCookie('liked_' + this.postName) === '1';
+       },
+       getCookie(name) {
+         const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+         return match ? match[2] : null;
+       },
+       setCookie(name, value, days) {
+         const d = new Date();
+         d.setTime(d.getTime() + (days * 86400000));
+         document.cookie = name + '=' + value + ';path=/;expires=' + d.toUTCString();
+       },
+       async like() {
+         if (this.liked) return;
+         try {
+           const resp = await fetch('/apis/api.halo.run/v1alpha1/trackers/upvote', {
+             method: 'POST',
+             headers: { 'Content-Type': 'application/json' },
+             body: JSON.stringify({ group: 'content.halo.run', plural: 'posts', name: this.postName })
+           });
+           if (resp.ok) {
+             this.liked = true;
+             this.count++;
+             this.setCookie('liked_' + this.postName, '1', 365);
+           }
+         } catch (e) {
+           console.error('Like error:', e);
+         }
+       }
+     }"
+     x-init="init()">
+   <button class="btn btn-icon btn-sm btn-link text-secondary" :class="{ 'active': liked }" @click="like()">
+     <i data-lucide="heart" :fill="liked ? 'currentColor' : 'none'"></i>
+   </button>
+  <span class="text-xs text-secondary ml-1" x-text="count">0</span>
+</div>

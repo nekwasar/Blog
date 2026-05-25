@@ -1,0 +1,80 @@
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="icon" type="image/png" th:if="${site.favicon}" th:href="${site.favicon}"/>
+  <title th:text="|Error - ${site.title}|">Error</title>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/bootstrap/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/fancybox/fancybox.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/aos/aos.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/iconfont/iconfont.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/animate.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/reset.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/style.css"/>
+  <style>
+    .error-page-wrap { min-height: 100vh; }
+    .error-code { font-size: 8rem; font-weight: 800; line-height: 1; background: linear-gradient(135deg, var(--color-primary, #3b82f6), var(--color-secondary, #8b5cf6)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .error-icon { font-size: 5rem; opacity: 0.15; }
+  </style>
+  <style>[data-lucide]{width:1.2em;height:1.2em;stroke-width:1.5;flex-shrink:0}[data-lucide].text-lg{width:1.4em;height:1.4em}[data-lucide].text-md{width:1.1em;height:1.1em}[data-lucide].text-xs{width:0.9em;height:0.9em}</style>
+</head>
+<body class="hidden no-transition">
+  <div class="error-page-wrap d-flex align-items-center justify-content-center">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5 text-center">
+          <div class="error-icon mb-3" th:switch="${error.status}">
+            <i th:case="404" data-lucide="circle"></i>
+            <i th:case="500" data-lucide="upload"></i>
+            <i th:case="*" data-lucide="x"></i>
+          </div>
+          <div class="error-code mb-3">
+            <span th:text="${error.status}">404</span>
+          </div>
+          <h2 class="font-title text-xl mb-3" th:switch="${error.status}">
+            <span th:case="404" th:text="#{error.404.title}">Page Not Found</span>
+            <span th:case="500" th:text="#{error.500.title}">Internal Server Error</span>
+            <span th:case="403" th:text="#{error.403.title}">Access Denied</span>
+            <span th:case="400" th:text="#{error.400.title}">Bad Request</span>
+            <span th:case="*" th:text="#{error.default.title}">Something Went Wrong</span>
+          </h2>
+          <p class="text-secondary text-sm mb-4" th:switch="${error.status}">
+            <span th:case="404" th:text="#{error.404.message}">The page you are looking for does not exist or has been moved.</span>
+            <span th:case="500" th:text="#{error.500.message}">An unexpected error occurred. Please try again later.</span>
+            <span th:case="403" th:text="#{error.403.message}">You do not have permission to access this resource.</span>
+            <span th:case="400" th:text="#{error.400.message}">The request could not be understood by the server.</span>
+            <span th:case="*" th:text="#{error.default.message}">An unexpected error has occurred. Please try again.</span>
+          </p>
+          <div class="d-flex justify-content-center gap-2">
+            <a th:href="@{/}" class="btn btn-primary btn-rounded px-4">
+              <i data-lucide="home" class="mr-2"></i>
+              <span th:text="#{common.home}">Home</span>
+            </a>
+            <a href="javascript:window.location.reload()" class="btn btn-light btn-rounded px-4">
+              <i data-lucide="refresh-cw" class="mr-2"></i>
+              <span th:text="#{error.refresh}">Refresh</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <th:block th:replace="~{modules/footer :: footer}"/>
+  <script src="/themes/theme-anon/assets/js/jquery.min.js"></script>
+  <script defer src="/themes/theme-anon/assets/js/alpine.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/aos/aos.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/fancybox/fancybox.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/ResizeSensor.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+  <script src="/themes/theme-anon/assets/js/nicetheme.js"></script>
+  <script>AOS.init();</script>
+  <div class="scroll-toolbar"><div class="scroll-backtotop" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(180,185,200,0.85);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%) saturate(140%);border:1px solid rgba(0,0,0,0.06);border-radius:50%;cursor:pointer;transition:all 0.3s ease"><i data-lucide="arrow-up"></i></div></div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

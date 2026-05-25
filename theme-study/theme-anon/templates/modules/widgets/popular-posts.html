@@ -1,0 +1,23 @@
+<div th:fragment="widget" class="blog-block box-block block w-100 mb-3" xmlns:th="http://www.thymeleaf.org"
+     th:with="posts=${postFinder.list(1, 5)}">
+  <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+    <h5 class="font-title text-md mb-0" th:text="#{widget.popularPosts.title}">Popular Posts</h5>
+  </div>
+  <ul class="blog-list font-title" th:if="${!posts.items.isEmpty()}">
+    <li th:each="post, iter : ${posts.items}" th:if="${post.status?.phase == 'PUBLISHED'}" class="list-item d-flex mb-3">
+      <div class="list-rank font-number text-xs mr-2" th:text="${iter.index + 1}">1</div>
+      <div class="list-content flex-grow-1 min-w-0">
+        <a th:href="@{/{name}(name=${post.metadata.name})}" class="text-sm h-1x d-block" th:text="${post.spec.title}">Post Title</a>
+        <span class="text-xs text-secondary d-flex align-items-center mt-1">
+          <i data-lucide="eye" class="mr-1"></i>
+          <span th:text="${post.stats?.visit ?: 0}">0</span>
+        </span>
+      </div>
+      <div class="media media-2x1 rounded-1 ml-2" style="width:80px;flex-shrink:0;" th:if="${post.spec.cover}">
+        <a th:href="@{/{name}(name=${post.metadata.name})}" class="media-content rounded-1"
+           th:style="'background-image: url(' + ${post.spec.cover} + ')'"></a>
+      </div>
+    </li>
+  </ul>
+  <p th:if="${posts.items.isEmpty()}" class="text-xs text-secondary mb-0" th:text="#{common.noPosts}">No posts</p>
+</div>

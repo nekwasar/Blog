@@ -1,0 +1,169 @@
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"/>
+  <meta name="robots" content="index,follow"/>
+  <meta property="og:site_name" th:content="${site.title}"/>
+  <meta name="description" th:content="${tag.spec.displayName} + ' - ' + ${site.title}"/>
+  <meta property="og:title" th:content="|${tag.spec.displayName} - ${site.title}|"/>
+  <meta property="og:description" th:content="${tag.spec.displayName} + ' - ' + ${site.title}"/>
+  <meta property="og:url" th:content="@{/tags/${tag.metadata.name}}"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" th:content="|${tag.spec.displayName} - ${site.title}|"/>
+  <link rel="alternate" th:href="@{/rss.xml}" type="application/rss+xml" th:title="${site.title}"/>
+  <link rel="icon" type="image/png" th:if="${site.favicon}" th:href="${site.favicon}"/>
+  <title th:text="|${tag.spec.displayName} - ${site.title}|">Tag</title>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/bootstrap/bootstrap.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/fancybox/fancybox.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/aos/aos.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/iconfont/iconfont.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/animate.min.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/reset.css"/>
+  <link rel="stylesheet" href="/themes/theme-anon/assets/css/style.css"/>
+  <style>[data-lucide]{width:1.2em;height:1.2em;stroke-width:1.5;flex-shrink:0}[data-lucide].text-lg{width:1.4em;height:1.4em}[data-lucide].text-md{width:1.1em;height:1.1em}[data-lucide].text-xs{width:0.9em;height:0.9em}</style>
+</head>
+<body class="hidden no-transition">
+  <th:block th:replace="~{modules/header :: header}"/>
+  <main class="site-main h-v-75">
+    <div class="container">
+      <div class="row g-3">
+        <aside class="sidebar-left col-md-4 col-xl-3 d-none d-md-block">
+          <div class="box-block block w-100 mb-3 text-center">
+            <a th:href="@{/authors/{name}(name=${site.title})}">
+              <img th:src="${site.logo}" th:alt="${site.title}" class="flex-avatar w-80 mx-auto d-block"/>
+            </a>
+            <h3 class="profile-name font-title mt-3 mb-1">
+              <a th:href="@{/authors/{name}(name=${site.title})}" th:text="${site.title}">Author Name</a>
+            </h3>
+            <p class="text-secondary text-sm mt-1" th:text="${site.subtitle ?: ''}">Subtitle</p>
+          </div>
+          <div class="data-block mt-3 mb-3">
+            <div class="row g-2 g-lg-3" th:with="stats=${siteStatsFinder.getStats()}">
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.post ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.posts}">Posts</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.comment ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.comments}">Comments</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.upvote ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.upvotes}">Upvotes</div>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="item box-block nopd-block block text-center py-2">
+                  <div class="font-number text-xxl lh-1" th:text="${stats.visit ?: 0}">0</div>
+                  <div class="font-title text-xs text-secondary mt-1" th:text="#{widget.profile.visits}">Visits</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="social-block box-block block d-none d-md-block w-100 mb-3">
+            <div class="d-flex justify-content-center flex-wrap gap-2">
+              <a th:each="item : ${theme.config.footer.social_media}" th:if="${item.url != null && !item.url.isEmpty()}"
+                 th:href="${item.url}" target="_blank" rel="noopener" class="btn btn-light btn-icon btn-sm btn-rounded">
+                <i th:class="'iconfont ' + ${item.icon}"></i>
+              </a>
+            </div>
+          </div>
+        </aside>
+        <div class="col-md-8 col-xl-6">
+          <div class="box-block block w-100 mb-3">
+            <div class="d-flex align-items-center">
+              <div class="d-flex align-items-center justify-content-center rounded mr-3"
+                   style="width:64px;height:43px;background:var(--color-primary)">
+                <i data-lucide="tag" class="text-white" style="font-size:1.2rem"></i>
+              </div>
+              <div class="flex-fill min-w-0">
+                <h1 class="font-title text-xl mb-1">
+                  <span th:text="'# ' + ${tag.spec.displayName}">#Tag</span>
+                </h1>
+                <span class="text-xs text-secondary" th:text="${tag.status.postCount} + ' posts'">0 posts</span>
+              </div>
+            </div>
+          </div>
+          <th:block th:with="posts=${postFinder.listByTag(1, 10, tag.metadata.name)}">
+            <th:block th:each="post : ${posts.items}" th:if="${post.status?.phase == 'PUBLISHED'}">
+              <article class="item block p-3 mb-3">
+                <a th:href="@{/{name}(name=${post.metadata.name})}" class="media media-3x2">
+                  <div class="media-content" th:style="'background-image: url(' + ${post.spec.cover ?: #theme.assets('/images/default-cover.svg')} + ')'">
+                    <img th:src="${post.spec.cover ?: #theme.assets('/images/default-cover.svg')}" th:alt="${post.spec.title}"/>
+                  </div>
+                  <div th:if="${post.spec.pinned}" class="media-overlay overlay-top">
+                    <span class="badge text-xs px-1 rounded-1" style="background:#ff3e3e;color:#fff"><i data-lucide="pin" class="mr-1"></i></span>
+                  </div>
+                  <div class="media-overlay overlay-top" th:if="${!post.spec.pinned && post.categories != null && !post.categories.isEmpty()}">
+                    <span class="badge text-xs px-1 rounded-1" style="background:var(--color-primary);color:#fff" th:text="${post.categories[0].spec.displayName}">Category</span>
+                  </div>
+                </a>
+                <h2 class="list-title h4 mt-2 mb-1">
+                  <a th:href="@{/{name}(name=${post.metadata.name})}" th:text="${post.spec.title}">Post Title</a>
+                </h2>
+                <p class="text-secondary text-sm h-2x mt-1" th:text="${post.status?.excerpt ?: #strings.abbreviate(post.spec.title, 120)}">Excerpt</p>
+                <div class="d-flex align-items-center justify-content-between text-xs text-secondary mt-2">
+                  <div class="d-flex align-items-center gap-3">
+                    <span><i data-lucide="clock" class="mr-1"></i><span th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</span></span>
+                  </div>
+                  <div class="d-flex align-items-center gap-3">
+                    <span th:if="${post.stats?.visit != null}"><i data-lucide="eye" class="mr-1"></i><span th:text="${post.stats.visit ?: 0}">0</span></span>
+                    <span th:if="${post.stats?.comment != null}"><i data-lucide="message-square" class="mr-1"></i><span th:text="${post.stats.comment ?: 0}">0</span></span>
+                  </div>
+                </div>
+              </article>
+            </th:block>
+            <div th:if="${posts.items.isEmpty()}" class="text-center py-5">
+              <div class="text-secondary h3" th:text="#{common.noPosts}">No posts found</div>
+            </div>
+            <nav th:if="${posts.totalPages > 1}" class="pagination-container mt-4">
+              <div class="pagination">
+                <a th:if="${posts.hasPrevious()}" th:href="@{/tags/{name}(name=${tag.metadata.name}, page=${posts.number - 1})}" class="page-number" rel="prev">
+                  <i data-lucide="chevron-left"></i>
+                </a>
+                <span th:unless="${posts.hasPrevious()}" class="page-number disabled">
+                  <i data-lucide="chevron-left"></i>
+                </span>
+                <a th:each="i : ${#numbers.sequence(0, posts.totalPages - 1)}"
+                   th:href="${i == 0 ? @{/tags/{name}(name=${tag.metadata.name})} : @{/tags/{name}(name=${tag.metadata.name}, page=${i})}"
+                   th:text="${i + 1}"
+                   th:class="'page-number' + (${i == posts.number} ? ' current' : '')">1</a>
+                <a th:if="${posts.hasNext()}" th:href="@{/tags/{name}(name=${tag.metadata.name}, page=${posts.number + 1})}" class="page-number" rel="next">
+                  <i data-lucide="chevron-right"></i>
+                </a>
+                <span th:unless="${posts.hasNext()}" class="page-number disabled">
+                  <i data-lucide="chevron-right"></i>
+                </span>
+              </div>
+            </nav>
+          </th:block>
+        </div>
+        <aside class="sidebar-right col-xl-3 d-none d-xl-block">
+          <div th:replace="~{modules/sidebar :: sidebar}"></div>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <th:block th:replace="~{modules/footer :: footer}"/>
+  <script src="/themes/theme-anon/assets/js/jquery.min.js"></script>
+  <script defer src="/themes/theme-anon/assets/js/alpine.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/aos/aos.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/fancybox/fancybox.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.umd.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/ResizeSensor.min.js"></script>
+  <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+  <script src="/themes/theme-anon/assets/js/nicetheme.js"></script>
+  <script>AOS.init();</script>
+  <div class="scroll-toolbar"><div class="scroll-backtotop" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(180,185,200,0.85);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%) saturate(140%);border:1px solid rgba(0,0,0,0.06);border-radius:50%;cursor:pointer;transition:all 0.3s ease"><i data-lucide="arrow-up"></i></div></div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:halo="https://www.halo.run">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:site_name" th:content="${site.title}" />
+    <meta name="description" th:content="${post.status?.excerpt ?: post.spec.title}" />
+    <meta property="og:title" th:content="${post.spec.title}" />
+    <meta property="og:description" th:content="${post.status?.excerpt ?: post.spec.title}" />
+    <meta property="og:url" th:content="@{/{name}(name=${post.metadata.name})}" />
+    <meta th:if="${post.spec.cover}" property="og:image" th:content="${post.spec.cover}" />
+    <link rel="alternate" th:href="@{/rss.xml}" type="application/rss+xml" th:title="${site.title}" />
+    <link rel="icon" type="image/png" th:if="${site.favicon}" th:href="${site.favicon}" />
+    <title th:text="|${post.spec.title} - ${site.title}|">Post Title</title>
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/fancybox/fancybox.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/aos/aos.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/animate.min.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/reset.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/style.css" />
+  <style>[data-lucide]{width:1.2em;height:1.2em;stroke-width:1.5;flex-shrink:0}[data-lucide].text-lg{width:1.4em;height:1.4em}[data-lucide].text-md{width:1.1em;height:1.1em}[data-lucide].text-xs{width:0.9em;height:0.9em}</style>
+</head>
+<body class="hidden no-transition">
+    <th:block th:replace="~{modules/header :: header}" />
+
+    <main class="site-main h-v-75">
+        <!-- Cover Image Hero -->
+        <div th:if="${!#strings.isEmpty(post.spec.cover)}" class="mb-4">
+            <div class="container">
+                <div class="media media-3x1 rounded" th:style="'background-image: url(' + ${post.spec.cover} + ')'"></div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row g-3">
+                <!-- MAIN CONTENT -->
+                <div class="col-md-8 col-xl-6">
+                    <div class="item block p-3" th:with="postCursor = ${postFinder.cursor(post.metadata.name)}">
+                        <!-- Post title -->
+                        <h1 class="font-title text-xl mb-3" th:text="${post.spec.title}">Post Title</h1>
+
+                        <!-- Info bar -->
+                        <div class="item-info d-flex align-items-center justify-content-between gap-3 mb-3">
+                            <div class="info-avatar flex-avatar">
+                                <img th:src="${post.owner?.avatar ?: #theme.assets('/images/default-avatar.svg')}" th:alt="${post.owner?.displayName}" />
+                            </div>
+                            <div class="info-content">
+                                <div class="info-name" th:with="contributor = ${post.owner}">
+                                    <span th:text="${contributor?.displayName}">Author</span>
+                                </div>
+                                <div class="info-data text-muted text-xs">
+                                    <span th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2024-01-01</span>
+                                    <span class="mx-1">·</span>
+                                    <span th:text="#{common.visitCount(${post.stats?.visit ?: 0})}">0 views</span>
+                                </div>
+                            </div>
+                            <div th:if="${!post.categories.isEmpty()}">
+                                <a th:href="@{/categories/{name}(name=${post.categories[0].metadata.name})}" class="istag"
+                                   th:text="${post.categories[0].spec.displayName}">Category</a>
+                            </div>
+                        </div>
+
+                        <!-- Tags -->
+                        <div class="mb-3" th:if="${!post.tags.isEmpty()}">
+                            <a th:each="tag : ${post.tags}" th:href="@{/tags/{name}(name=${tag.metadata.name})}"
+                               class="istag mr-1" th:text="'#' + ${tag.spec.displayName}">#tag</a>
+                        </div>
+
+                        <!-- Content -->
+                        <div class="item-content">
+                            <article class="text-secondary" th:utext="${post.content.content}">
+                                Post content goes here...
+                            </article>
+                        </div>
+
+                        <!-- Actions bar -->
+                        <div class="item-actions font-number d-flex align-items-center justify-content-evenly mt-4 pt-3" style="border-top:1px solid var(--color-muted-3)">
+                            <span class="action-button">
+                                <i data-lucide="eye"></i>
+                                <span th:text="${post.stats?.visit ?: 0}">0</span>
+                            </span>
+                            <a href="#comments" class="action-button">
+                                <i data-lucide="message-circle"></i>
+                                <span th:text="${post.stats?.comment ?: 0}">0</span>
+                            </a>
+                            <a href="javascript:;" class="action-button like-action"
+                               th:attr="data-upvote-name=${post.metadata.name}"
+                               th:with="postId=${post.metadata.name}, upvoteCount=${post.stats?.upvote ?: 0}"
+                               x-data="{liked:false, count: ${post.stats?.upvote ?: 0}}"
+                               @click="if(!liked){liked=true; count++; $el.classList.add('active')}">
+                                <i data-lucide="heart"></i>
+                                <span th:text="${post.stats?.upvote ?: 0}">0</span>
+                            </a>
+                        </div>
+
+                        <!-- Prev/Next navigation -->
+                        <div th:if="${postCursor != null}" class="d-flex justify-content-between mt-4">
+                            <a th:if="${postCursor.hasPrevious()}" th:href="@{/{name}(name=${postCursor.previous.metadata.name})}"
+                               class="page-number" th:title="${postCursor.previous.spec.title}">
+                                <i data-lucide="arrow-left"></i>
+                                <span th:text="#{page.post.prevPost}">Previous</span>
+                            </a>
+                            <span th:unless="${postCursor.hasPrevious()}"></span>
+                            <a th:if="${postCursor.hasNext()}" th:href="@{/{name}(name=${postCursor.next.metadata.name})}"
+                               class="page-number" th:title="${postCursor.next.spec.title}">
+                                <span th:text="#{page.post.nextPost}">Next</span>
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div id="comments" class="box-block block p-3 mt-3">
+                        <halo:comment group="content.halo.run" kind="Post" th:attr="name=${post.metadata.name}" />
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDEBAR -->
+                <aside class="sidebar-right col-xl-3 d-none d-xl-block">
+                    <!-- TOC -->
+                    <div class="blog-block box-block block w-100 mb-3" th:if="${post.content.content != null}">
+                        <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+                            <div class="font-title text-md" th:text="#{common.toc}">Contents</div>
+                        </div>
+                        <div class="toc text-sm"></div>
+                    </div>
+                    <!-- Latest posts -->
+                    <div class="blog-block box-block block w-100 mb-3" th:with="latest = ${postFinder.list(1, 5)}">
+                        <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+                            <div class="font-title text-md" th:text="#{widget.latestPosts.title}">Latest</div>
+                        </div>
+                        <div class="blog-list font-title">
+                            <div th:each="lp : ${latest.items}" class="text-sm h-1x">
+                                <a th:href="@{/{name}(name=${lp.metadata.name})}" th:text="${lp.spec.title}">Post Title</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Tags -->
+                    <div class="tags-block box-block block w-100 mb-3" th:with="tags = ${tagFinder.listAll()}">
+                        <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+                            <div class="font-title text-md" th:text="#{widget.tags.title}">Tags</div>
+                        </div>
+                        <div class="tags-list">
+                            <a th:each="t : ${tags}" th:href="@{/tags/{name}(name=${t.metadata.name})}" class="istag" th:text="${t.spec.displayName}">tag</a>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:replace="~{modules/footer :: footer}" />
+    <script src="/themes/theme-anon/assets/js/jquery.min.js"></script>
+    <script defer src="/themes/theme-anon/assets/js/alpine.min.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/aos/aos.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/swiper/swiper-bundle.min.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/fancybox/fancybox.umd.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/panzoom/panzoom.toolbar.umd.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/ResizeSensor.min.js"></script>
+    <script src="/themes/theme-anon/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.min.js"></script>
+    <script src="/themes/theme-anon/assets/js/nicetheme.js"></script>
+    <script>AOS.init();</script>
+    <div class="scroll-toolbar"><div class="scroll-backtotop" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(180,185,200,0.85);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%) saturate(140%);border:1px solid rgba(0,0,0,0.06);border-radius:50%;cursor:pointer;transition:all 0.3s ease"><i data-lucide="arrow-up"></i></div></div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

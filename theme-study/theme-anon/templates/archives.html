@@ -1,0 +1,150 @@
+<!doctype html>
+<html th:lang="${#locale.toLanguageTag}"
+      xmlns:th="http://www.thymeleaf.org" xmlns:halo="https://www.halo.run">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+    <meta name="robots" content="index,follow" />
+    <meta property="og:site_name" th:content="${site.title}" />
+    <meta name="description" th:content="${site.subtitle ?: site.title}" />
+    <meta property="og:title" th:content="|#{common.archives} - ${site.title}|" />
+    <meta property="og:url" th:content="@{/archives}" />
+    <link rel="alternate" th:href="@{/rss.xml}" type="application/rss+xml" th:title="${site.title}" />
+    <link rel="icon" type="image/png" th:if="${site.favicon}" th:href="${site.favicon}" />
+    <title th:text="|#{common.archives} - ${site.title}|">Archives</title>
+    <link rel="stylesheet" href="/themes/theme-anon/assets/plugins/bootstrap/bootstrap.min.css" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/animate.min.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/reset.css" />
+    <link rel="stylesheet" href="/themes/theme-anon/assets/css/style.css" />
+  <style>[data-lucide]{width:1.2em;height:1.2em;stroke-width:1.5;flex-shrink:0}[data-lucide].text-lg{width:1.4em;height:1.4em}[data-lucide].text-md{width:1.1em;height:1.1em}[data-lucide].text-xs{width:0.9em;height:0.9em}</style>
+</head>
+<body class="hidden no-transition">
+    <th:block th:replace="~{modules/header :: header}" />
+
+    <main class="site-main h-v-75">
+        <div class="container">
+            <div class="row g-3">
+                <aside class="sidebar-left col-md-4 col-xl-3 d-none d-md-block">
+                    <div class="profile-block box-block block w-100 text-center mb-3">
+                        <div class="flex-avatar mx-auto">
+                            <img th:src="${site.logo ?: #theme.assets('/images/default-avatar.svg')}" th:alt="${site.title}" />
+                        </div>
+                        <div class="profile-name font-title" th:text="${site.title}">Site</div>
+                        <div class="d-flex justify-content-center mt-2">
+                            <span class="author-badge font-title fw-bold" th:text="#{widget.profile.title}">Admin</span>
+                        </div>
+                        <div class="text-secondary text-sm mt-3">
+                            <div class="h-2x" th:text="${site.subtitle ?: ''}"></div>
+                        </div>
+                        <div class="data-block mt-3 mb-3" th:with="stats = ${siteStatsFinder.getStats()}">
+                            <div class="row g-2 g-lg-3">
+                                <div class="col-6">
+                                    <div class="item box-block nopd-block block">
+                                        <div class="item-content">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="font-title text-xs text-secondary" th:text="#{widget.profile.posts}">Posts</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-auto">
+                                                <div class="font-number text-xxl lh-1" th:text="${stats?.post ?: 0}">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="item box-block nopd-block block">
+                                        <div class="item-content">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="font-title text-xs text-secondary" th:text="#{widget.profile.comments}">Comments</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-auto">
+                                                <div class="font-number text-xxl lh-1" th:text="${stats?.comment ?: 0}">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="item box-block nopd-block block">
+                                        <div class="item-content">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="font-title text-xs text-secondary" th:text="#{widget.profile.upvotes}">Upvotes</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-auto">
+                                                <div class="font-number text-xxl lh-1" th:text="${stats?.upvote ?: 0}">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="item box-block nopd-block block">
+                                        <div class="item-content">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <div class="font-title text-xs text-secondary" th:text="#{widget.profile.visits}">Visits</div>
+                                            </div>
+                                            <div class="d-flex justify-content-between mt-auto">
+                                                <div class="font-number text-xxl lh-1" th:text="${stats?.visit ?: 0}">0</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="col-md-8 col-xl-6">
+                    <div class="forum-wrapper" th:with="archiveResult = ${postFinder.archives(1, 100)}">
+                        <div class="forum-tab font-title block p-3">
+                            <div class="forum-tabmenu">
+                                <span class="item active" th:text="#{common.archives}">Archives</span>
+                            </div>
+                        </div>
+                        <div class="forum-posts">
+                            <th:block th:each="yearArchive : ${archiveResult.items}">
+                                <div class="item block p-3 mb-2">
+                                    <h2 class="font-title text-lg mb-3" th:text="${yearArchive.year}">2024</h2>
+                                    <th:block th:each="monthData : ${yearArchive.months}">
+                                        <div class="mb-3">
+                                            <h3 class="font-title text-md text-secondary mb-2" th:text="${monthData.month}">January</h3>
+                                            <th:block th:each="post : ${monthData.posts}">
+                                                <div class="d-flex align-items-center justify-content-between py-1">
+                                                    <a th:href="@{/{name}(name=${post.metadata.name})}" th:text="${post.spec.title}" class="text-sm">Post Title</a>
+                                                    <span class="text-xs text-muted" th:text="${#temporals.format(post.spec.publishTime, 'MM-dd')}">01-01</span>
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </th:block>
+                            <div th:if="${archiveResult.items.isEmpty()}" class="text-center py-5">
+                                <div class="text-secondary h3" th:text="#{common.noPosts}">No posts found</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="sidebar-right col-xl-3 d-none d-xl-block">
+                    <div class="blog-block box-block block w-100 mb-3" th:with="latest = ${postFinder.list(1, 5)}">
+                        <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+                            <div class="font-title text-md" th:text="#{widget.latestPosts.title}">Latest</div>
+                        </div>
+                        <div class="blog-list font-title">
+                            <div th:each="lp : ${latest.items}" class="text-sm h-1x">
+                                <a th:href="@{/{name}(name=${lp.metadata.name})}" th:text="${lp.spec.title}">Post Title</a>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <th:block th:replace="~{modules/footer :: footer}" />
+    <script src="/themes/theme-anon/assets/js/jquery.min.js"></script>
+    <script defer src="/themes/theme-anon/assets/js/alpine.min.js"></script>
+    <script src="/themes/theme-anon/assets/js/nicetheme.js"></script>
+    <script>AOS.init();</script>
+    <div class="scroll-toolbar"><div class="scroll-backtotop" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:rgba(180,185,200,0.85);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%) saturate(140%);border:1px solid rgba(0,0,0,0.06);border-radius:50%;cursor:pointer;transition:all 0.3s ease"><i data-lucide="arrow-up"></i></div></div>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

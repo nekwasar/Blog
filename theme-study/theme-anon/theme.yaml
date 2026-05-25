@@ -1,0 +1,31 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: theme-anon
+spec:
+  displayName: Anon
+  author:
+    name: anonymous
+    website: https://github.com
+  description: A privacy-first, anonymous-friendly Halo blog theme. No signup required for comments or likes.
+  logo: /themes/theme-anon/assets/images/logo.png
+  homepage: https://github.com
+  repo: https://github.com
+  version: 1.0.0
+  requires: ">=2.20.0"
+  settingName: "theme-anon-setting"
+  configMapName: "theme-anon-configMap"
+  license:
+    - name: "MIT"
+      url: "https://opensource.org/licenses/MIT"
+  customTemplates:
+    page:
+      - name: "友情链接"
+        description: "友情链接页面模板"
+        file: links.html
+      - name: "瞬间"
+        description: "动态/说说页面模板"
+        file: moments.html
+      - name: "图库"
+        description: "相册/图片展示页面模板"
+        file: photos.html

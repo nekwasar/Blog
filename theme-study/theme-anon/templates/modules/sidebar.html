@@ -1,0 +1,20 @@
+<aside th:fragment="sidebar" xmlns:th="http://www.thymeleaf.org">
+  <div class="sidebar-widgets" th:if="${theme.config.sidebar.widgets != null}">
+    <th:block th:each="widget : ${theme.config.sidebar.widgets}">
+      <th:block th:switch="${widget.value}">
+        <th:block th:case="'profile'">
+          <th:block th:replace="~{modules/widgets/profile :: widget}"></th:block>
+        </th:block>
+        <th:block th:case="'popular-posts'">
+          <th:block th:replace="~{modules/widgets/popular-posts :: widget}"></th:block>
+        </th:block>
+        <th:block th:case="'categories'">
+          <th:block th:replace="~{modules/widgets/categories :: widget}"></th:block>
+        </th:block>
+        <th:block th:case="'tags'">
+          <th:block th:replace="~{modules/widgets/tags :: widget}"></th:block>
+        </th:block>
+      </th:block>
+    </th:block>
+  </div>
+</aside>

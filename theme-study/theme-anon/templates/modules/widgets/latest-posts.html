@@ -1,0 +1,13 @@
+<div th:fragment="widget" class="blog-block box-block block w-100 mb-3" xmlns:th="http://www.thymeleaf.org"
+     th:with="posts=${postFinder.list(1, 5)}">
+  <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+    <h5 class="font-title text-md mb-0" th:text="#{widget.latestPosts.title}">Latest Posts</h5>
+  </div>
+  <ul class="blog-list font-title" th:if="${!posts.items.isEmpty()}">
+    <li th:each="post : ${posts.items}" th:if="${post.status?.phase == 'PUBLISHED'}" class="d-flex align-items-center justify-content-between mb-2">
+      <a th:href="@{/{name}(name=${post.metadata.name})}" class="text-sm h-1x flex-grow-1 mr-2" th:text="${post.spec.title}">Post Title</a>
+      <span class="text-xs text-secondary flex-shrink-0" th:text="${#temporals.format(post.spec.publishTime, 'MM-dd')}">01-01</span>
+    </li>
+  </ul>
+  <p th:if="${posts.items.isEmpty()}" class="text-xs text-secondary mb-0" th:text="#{common.noPosts}">No posts</p>
+</div>

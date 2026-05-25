@@ -1,0 +1,29 @@
+<nav th:fragment="pagination(posts)" class="pagination-container" xmlns:th="http://www.thymeleaf.org">
+  <div class="pagination">
+    <a th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}" class="page-number" rel="prev">
+      <i data-lucide="chevron-left"></i>
+      <span class="d-none d-sm-inline ml-1" th:text="#{common.prev}">Previous</span>
+    </a>
+    <span th:unless="${posts.hasPrevious()}" class="page-number disabled">
+      <i data-lucide="chevron-left"></i>
+      <span class="d-none d-sm-inline ml-1" th:text="#{common.prev}">Previous</span>
+    </span>
+    <a th:each="pageNum : ${posts.pageNumbers}"
+       th:if="${pageNum != null}"
+       th:href="@{${posts.pageUrl(pageNum)}}"
+       class="page-number"
+       th:classappend="${pageNum == posts.page} ? 'current'"
+       th:text="${pageNum}">1</a>
+    <span th:each="pageNum : ${posts.pageNumbers}"
+          th:if="${pageNum == null}"
+          class="page-number space">&hellip;</span>
+    <a th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}" class="page-number" rel="next">
+      <span class="d-none d-sm-inline mr-1" th:text="#{common.next}">Next</span>
+      <i data-lucide="chevron-right"></i>
+    </a>
+    <span th:unless="${posts.hasNext()}" class="page-number disabled">
+      <span class="d-none d-sm-inline mr-1" th:text="#{common.next}">Next</span>
+      <i data-lucide="chevron-right"></i>
+    </span>
+  </div>
+</nav>

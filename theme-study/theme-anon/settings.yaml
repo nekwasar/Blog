@@ -1,0 +1,188 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: theme-anon-setting
+spec:
+  forms:
+    - group: layout
+      label: Layout
+      formSchema:
+        - $formkit: select
+          name: post_list_layout
+          label: Posts列表布局
+          value: grid_3
+          options:
+            - label: 网格（一行三列）
+              value: grid_3
+            - label: 网格（一行两列）
+              value: grid_2
+            - label: 单条
+              value: single
+          help: "选择单条时，文章卡片的图片将位于左侧"
+        - $formkit: select
+          name: header_widget
+          id: header_widget
+          label: 首页顶部模块
+          value: latest_post
+          options:
+            - label: 无
+              value: none
+            - label: 最新一篇文章
+              value: latest_post
+            - label: Posts网格（最新五篇文章）
+              value: latest_post_grid
+            - label: 站点标题
+              value: site_title
+        - $formkit: select
+          if: "$get(header_widget).value !== none"
+          name: header_background_type
+          id: header_background_type
+          key: header_background_type
+          label: 首页顶部背景
+          value: image
+          options:
+            - label: 手动设置
+              value: manual
+            - label: 图片
+              value: image
+        - $formkit: text
+          if: "$get(header_widget).value !== none && $get(header_background_type).value === manual"
+          name: header_background
+          label: 首页顶部背景
+        - $formkit: attachment
+          if: "$get(header_widget).value !== none && $get(header_background_type).value === image"
+          name: header_background_image
+          label: 首页顶部背景图片
+    - group: style
+      label: Style
+      formSchema:
+        - $formkit: select
+          name: color_scheme
+          label: 默认配色
+          value: system
+          options:
+            - label: 跟随系统
+              value: system
+            - label: 深色
+              value: dark
+            - label: 浅色
+              value: light
+        - $formkit: checkbox
+          name: enable_change_color_scheme
+          label: 允许访客切换配色
+          value: true
+        - $formkit: checkbox
+          name: show_scroll_button
+          label: 显示滚动到顶部按钮
+          value: true
+    - group: post
+      label: Posts
+      formSchema:
+        - $formkit: select
+          name: content_style
+          label: 内容样式
+          value: "github"
+          options:
+            - label: GitHub 风格
+              value: github
+            - label: Tailwind CSS Typography
+              value: tailwind
+        - $formkit: select
+          name: title_position
+          label: 标题位置
+          value: "content"
+          options:
+            - value: "content"
+              label: "正文中"
+            - value: "cover"
+              label: "封面中"
+        - $formkit: text
+          name: cover_height
+          label: 封面图高度
+          value: "24rem"
+        - $formkit: checkbox
+          name: show_upvote_button
+          label: 显示点赞按钮
+          value: true
+        - $formkit: checkbox
+          name: show_share_button
+          label: 显示分享按钮
+          value: true
+    - group: sidebar
+      label: Sidebar
+      formSchema:
+        - $formkit: array
+          name: widgets
+          label: 小部件
+          value:
+            - value: popular-posts
+            - value: categories
+            - value: tags
+          itemLabels:
+            - type: "text"
+              label: "$value.value"
+          children:
+            - $formkit: select
+              name: value
+              label: 部件
+              options:
+                - label: 站点资料
+                  value: profile
+                - label: 热门文章
+                  value: popular-posts
+                - label: Posts分类
+                  value: categories
+                - label: Posts标签
+                  value: tags
+    - group: footer
+      label: Footer
+      formSchema:
+        - $formkit: select
+          name: style
+          label: Footer风格
+          value: style_1
+          options:
+            - label: 风格一
+              value: style_1
+        - $formkit: text
+          name: slogan
+          label: 标语
+        - $formkit: array
+          name: social_media
+          label: 社交媒体
+          value: []
+          itemLabels:
+            - type: "text"
+              label: "$value.name"
+          children:
+            - $formkit: select
+              name: icon
+              label: 图标
+              options:
+                - label: GitHub
+                  value: i-simple-icons-github
+                - label: Twitter
+                  value: i-simple-icons-twitter
+                - label: Telegram
+                  value: i-simple-icons-telegram
+                - label: RSS
+                  value: i-simple-icons-rss
+                - label: Email
+                  value: i-tabler-mail
+            - $formkit: text
+              name: name
+              label: 名称
+            - $formkit: text
+              name: url
+              label: 链接
+              validation: "required"
+    - group: beian
+      label: Legal
+      formSchema:
+        - $formkit: text
+          name: icp_text
+          label: ICP备案号
+        - $formkit: text
+          name: icp_link
+          label: ICP备案跳转链接
+          value: https://beian.miit.gov.cn/

@@ -1,0 +1,111 @@
+<div th:fragment="share(shareItemIds)" x-data="share" class="share-modal" xmlns:th="http://www.thymeleaf.org">
+  <div class="nice-popup nice-popup-sm" x-bind:class="open ? 'nice-popup-open' : ''">
+    <div class="nice-popup-overlay" @click="open = false"></div>
+    <div class="nice-popup-body">
+      <div class="nice-popup-content">
+        <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+          <h5 class="font-title mb-0" th:text="#{common.share}">Share</h5>
+          <button type="button" class="btn btn-icon btn-xs btn-link text-secondary" @click="open = false">
+            <i data-lucide="x" class="text-xl"></i>
+          </button>
+        </div>
+        <div class="popup-actions">
+          <div th:if="${#lists.contains(shareItemIds, 'wechat')}" class="item" @click="shareWechat">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon text-success"><i data-lucide="message-circle"></i></span>
+                <span class="item-title" th:text="#{jsModule.share.wechat}">WeChat</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'weibo')}" class="item" @click="shareWeibo">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon text-danger"><i data-lucide="share-2"></i></span>
+                <span class="item-title" th:text="#{jsModule.share.weibo}">Weibo</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'qzone')}" class="item" @click="shareQzone">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon text-warning"><i data-lucide="share-2"></i></span>
+                <span class="item-title" th:text="#{jsModule.share.qzone}">QZone</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'douban')}" class="item" @click="shareDouban">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon" style="color:#00b51d"><i data-lucide="bookmark"></i></span>
+                <span class="item-title" th:text="#{jsModule.share.douban}">Douban</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'qq')}" class="item" @click="shareQQ">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon text-primary"><i data-lucide="send"></i></span>
+                <span class="item-title">QQ</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'telegram')}" class="item" @click="shareTelegram">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon" style="color:#26A5E4"><i data-lucide="send"></i></span>
+                <span class="item-title">Telegram</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'facebook')}" class="item" @click="shareFacebook">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon" style="color:#0866FF"><i data-lucide="share-2"></i></span>
+                <span class="item-title">Facebook</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'twitter')}" class="item" @click="shareTwitter">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon" style="color:#1D9BF0"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l11.733 16h4.267l-11.733-16z"/><path d="M4 20l6.768-6.768m2.46-2.46L20 4"/></svg></span>
+                <span class="item-title">Twitter</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+          <div th:if="${#lists.contains(shareItemIds, 'native')}" class="item" @click="shareNative">
+            <div class="item-content">
+              <div class="item-body">
+                <span class="item-icon text-secondary"><i data-lucide="share-2"></i></span>
+                <span class="item-title" th:text="#{jsModule.share.native}">System Share</span>
+              </div>
+              <i data-lucide="chevron-right" class="text-secondary text-xs"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nice-popup-close">
+      <span class="svg-dark" @click="open = false"></span>
+    </div>
+  </div>
+  <div th:if="${#lists.contains(shareItemIds, 'wechat')}" x-show="wechatQrcode" class="nice-popup nice-popup-sm nice-popup-open">
+    <div class="nice-popup-overlay" @click="wechatQrcode = false"></div>
+    <div class="nice-popup-body">
+      <div class="nice-popup-content text-center">
+        <h6 class="font-title mb-3" th:text="#{jsModule.share.wechat}">WeChat</h6>
+        <canvas id="wechatQrcode" class="d-block mx-auto" width="200" height="200"></canvas>
+        <p class="text-secondary text-xs mt-2">Scan QR code to share</p>
+      </div>
+    </div>
+  </div>
+</div>

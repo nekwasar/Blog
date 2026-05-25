@@ -1,0 +1,12 @@
+<div th:fragment="widget" class="tags-block box-block block w-100 mb-3" xmlns:th="http://www.thymeleaf.org"
+     th:with="tags=${tagFinder.listAll()}">
+  <div class="d-flex justify-content-between align-items-center mb-3 mb-xl-4">
+    <h5 class="font-title text-md mb-0" th:text="#{widget.tags.title}">Tags</h5>
+    <a th:href="@{/tags}" class="text-xs text-secondary" th:text="#{common.all}">All</a>
+  </div>
+  <div class="tags-list" th:if="${!tags.isEmpty()}">
+    <a th:each="tag : ${tags}" th:href="@{/tags/{name}(name=${tag.metadata.name})}"
+       class="istag text-sm" th:text="'# ' + ${tag.spec.displayName}">#tag</a>
+  </div>
+  <p th:if="${tags.isEmpty()}" class="text-xs text-secondary mb-0" th:text="#{common.noPosts}">No tags</p>
+</div>

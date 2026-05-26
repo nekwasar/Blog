@@ -20,12 +20,12 @@ spec:
       url: "https://opensource.org/licenses/MIT"
   customTemplates:
     page:
-      - name: "友情链接"
-        description: "友情链接页面模板"
+      - name: "Links"
+        description: "Links page template"
         file: links.html
-      - name: "瞬间"
-        description: "动态/说说页面模板"
+      - name: "Moments"
+        description: "Status / micro-blog page template"
         file: moments.html
-      - name: "图库"
-        description: "相册/图片展示页面模板"
+      - name: "Gallery"
+        description: "Photo gallery page template"
         file: photos.html

@@ -7,9 +7,9 @@ metadata:
   name: additional-webfilter
 spec:
   className: run.halo.app.security.AdditionalWebFilter
-  displayName: "附加 Web 过滤器"
+  displayName: "Additional Web Filter"
   type: MULTI_INSTANCE
-  description: "用于 Web 请求的链式处理，可以用来实现跨领域、与应用无关的需求，如安全性、超时等"
+  description: "Chain processing for web requests, used for cross-cutting concerns such as security and timeouts."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -18,9 +18,9 @@ metadata:
   name: reactive-post-content-handler
 spec:
   className: run.halo.app.theme.ReactivePostContentHandler
-  displayName: "文章内容处理器"
+  displayName: "Post Content Handler"
   type: MULTI_INSTANCE
-  description: "扩展在主题侧显示的文章内容"
+  description: "Extends post content displayed on the theme side."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -29,9 +29,9 @@ metadata:
   name: reactive-singlepage-content-handler
 spec:
   className: run.halo.app.theme.ReactiveSinglePageContentHandler
-  displayName: "页面内容处理器"
+  displayName: "Page Content Handler"
   type: MULTI_INSTANCE
-  description: "扩展在主题侧显示的页面内容"
+  description: "Extends page content displayed on the theme side."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -40,9 +40,9 @@ metadata:
   name: comment-widget
 spec:
   className: run.halo.app.theme.dialect.CommentWidget
-  displayName: "评论组件"
+  displayName: "Comment Widget"
   type: SINGLETON
-  description: "扩展在文章页面中显示的评论组件"
+  description: "Extends the comment component displayed on post pages."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -51,9 +51,9 @@ metadata:
   name: username-password-authentication-manager
 spec:
   className: run.halo.app.security.authentication.login.UsernamePasswordAuthenticationManager
-  displayName: "用户名密码认证管理器"
+  displayName: "Username/Password Authentication Manager"
   type: SINGLETON
-  description: "扩展用户名密码认证"
+  description: "Extends username/password authentication."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -62,9 +62,9 @@ metadata:
   name: reactive-notifier
 spec:
   className: run.halo.app.notification.ReactiveNotifier
-  displayName: "消息通知器"
+  displayName: "Notification Notifier"
   type: MULTI_INSTANCE
-  description: "扩展消息通知器，以向用户发送通知"
+  description: "Extends notification notifiers to send notifications to users."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -73,9 +73,9 @@ metadata:
   name: search-engine
 spec:
   className: run.halo.app.search.SearchEngine
-  displayName: "搜索引擎"
+  displayName: "Search Engine"
   type: SINGLETON
-  description: "扩展内容搜索引擎"
+  description: "Extends content search engine."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -84,9 +84,9 @@ metadata:
   name: template-footer-processor
 spec:
   className: run.halo.app.theme.dialect.TemplateFooterProcessor
-  displayName: 页脚标签内容处理器
+  displayName: Footer Content Processor
   type: MULTI_INSTANCE
-  description: "提供用于扩展 <halo:footer/> 标签内容的扩展方式。"
+  description: "Provides extension points for &lt;halo:footer/&gt; tag content."
 ---
 apiVersion: plugin.halo.run/v1alpha1
 kind: ExtensionPointDefinition
@@ -94,9 +94,10 @@ metadata:
   name: excerpt-generator
 spec:
   className: run.halo.app.content.ExcerptGenerator
-  displayName: 摘要生成器
+  displayName: Excerpt Generator
   type: SINGLETON
-  description: "提供自动生成摘要的方式扩展，如使用算法提取或使用 AI 生成。"
+  description: "Provides extension points for auto-generating excerpts, such as using algorithms or AI generation."
+
 ---
 apiVersion: plugin.halo.run/v1alpha1
 kind: ExtensionPointDefinition
@@ -104,9 +105,9 @@ metadata:
   name: thumbnail-provider
 spec:
   className: run.halo.app.core.attachment.ThumbnailProvider
-  displayName: 图片缩略图生成
+  displayName: Image Thumbnail Generation
   type: MULTI_INSTANCE
-  description: "提供生成图片缩略图的扩展方式"
+  description: "Provides extension points for generating image thumbnails."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -115,9 +116,9 @@ metadata:
   name: attachment-handler
 spec:
   className: run.halo.app.core.extension.attachment.endpoint.AttachmentHandler
-  displayName: "附件存储策略"
+  displayName: "Attachment Storage Policy"
   type: MULTI_INSTANCE
-  description: "提供附件上传、删除和存储的扩展方式"
+  description: "Provides extension points for attachment upload, deletion, and storage."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -126,9 +127,9 @@ metadata:
   name: comment-subject
 spec:
   className: run.halo.app.content.comment.CommentSubject
-  displayName: "评论主体"
+  displayName: "Comment Subject"
   type: MULTI_INSTANCE
-  description: "提供评论主体展示的扩展方式"
+  description: "Provides extension points for displaying comment subjects."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -137,9 +138,9 @@ metadata:
   name: template-head-processor
 spec:
   className: run.halo.app.theme.dialect.TemplateHeadProcessor
-  displayName: "页头内容处理器"
+  displayName: "Head Content Processor"
   type: MULTI_INSTANCE
-  description: "提供用于扩展主题页面 <head> 标签内容的扩展方式"
+  description: "Provides extension points for customizing &lt;head&gt; tag content in theme pages."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -148,9 +149,9 @@ metadata:
   name: element-tag-post-processor
 spec:
   className: run.halo.app.theme.dialect.ElementTagPostProcessor
-  displayName: "元素标签后置处理器"
+  displayName: "Element Tag Post Processor"
   type: MULTI_INSTANCE
-  description: "提供用于对 Thymeleaf 元素标签进行后置处理的扩展方式"
+  description: "Provides extension points for post-processing Thymeleaf element tags."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -159,9 +160,9 @@ metadata:
   name: before-security-webfilter
 spec:
   className: run.halo.app.security.BeforeSecurityWebFilter
-  displayName: "Security 前置过滤器"
+  displayName: "Security Pre Filter"
   type: MULTI_INSTANCE
-  description: "提供在 Security 过滤器链最前面执行的 Web 过滤器扩展方式"
+  description: "Provides extension points for web filters executed at the front of the security filter chain."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -170,9 +171,9 @@ metadata:
   name: after-security-webfilter
 spec:
   className: run.halo.app.security.AfterSecurityWebFilter
-  displayName: "Security 后置过滤器"
+  displayName: "Security Post Filter"
   type: MULTI_INSTANCE
-  description: "提供在 Security 过滤器链最后面执行的 Web 过滤器扩展方式"
+  description: "Provides extension points for web filters executed at the end of the security filter chain."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -181,9 +182,9 @@ metadata:
   name: http-basic-security-webfilter
 spec:
   className: run.halo.app.security.HttpBasicSecurityWebFilter
-  displayName: "HTTP Basic 认证过滤器"
+  displayName: "HTTP Basic Auth Filter"
   type: MULTI_INSTANCE
-  description: "提供 HTTP Basic 认证逻辑的扩展方式"
+  description: "Provides extension points for HTTP Basic authentication logic."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -192,9 +193,9 @@ metadata:
   name: form-login-security-webfilter
 spec:
   className: run.halo.app.security.FormLoginSecurityWebFilter
-  displayName: "表单登录认证过滤器"
+  displayName: "Form Login Auth Filter"
   type: MULTI_INSTANCE
-  description: "提供表单登录认证逻辑的扩展方式"
+  description: "Provides extension points for form login authentication logic."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -203,9 +204,9 @@ metadata:
   name: authentication-security-webfilter
 spec:
   className: run.halo.app.security.AuthenticationSecurityWebFilter
-  displayName: "普通认证过滤器"
+  displayName: "General Auth Filter"
   type: MULTI_INSTANCE
-  description: "提供普通认证逻辑的扩展方式"
+  description: "Provides extension points for general authentication logic."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -214,9 +215,9 @@ metadata:
   name: anonymous-authentication-security-webfilter
 spec:
   className: run.halo.app.security.AnonymousAuthenticationSecurityWebFilter
-  displayName: "匿名认证过滤器"
+  displayName: "Anonymous Auth Filter"
   type: MULTI_INSTANCE
-  description: "提供匿名认证逻辑的扩展方式"
+  description: "Provides extension points for anonymous authentication logic."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -225,9 +226,9 @@ metadata:
   name: oauth2-authorization-code-security-webfilter
 spec:
   className: run.halo.app.security.OAuth2AuthorizationCodeSecurityWebFilter
-  displayName: "OAuth2 授权码认证过滤器"
+  displayName: "OAuth2 Authorization Code Filter"
   type: MULTI_INSTANCE
-  description: "提供 OAuth2 授权码认证逻辑的扩展方式"
+  description: "Provides extension points for OAuth2 authorization code authentication logic."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -236,9 +237,9 @@ metadata:
   name: halo-documents-provider
 spec:
   className: run.halo.app.search.HaloDocumentsProvider
-  displayName: "搜索文档提供者"
+  displayName: "Search Document Provider"
   type: MULTI_INSTANCE
-  description: "提供用于重建搜索索引的文档数据"
+  description: "Provides document data for rebuilding search indexes."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -247,9 +248,9 @@ metadata:
   name: user-pre-creating-handler
 spec:
   className: run.halo.app.core.user.service.UserPreCreatingHandler
-  displayName: "用户创建前处理器"
+  displayName: "User Pre-Creation Handler"
   type: MULTI_INSTANCE
-  description: "提供在用户创建之前执行自定义逻辑的扩展方式"
+  description: "Provides extension points for executing custom logic before user creation."
 
 ---
 apiVersion: plugin.halo.run/v1alpha1
@@ -258,6 +259,6 @@ metadata:
   name: user-post-creating-handler
 spec:
   className: run.halo.app.core.user.service.UserPostCreatingHandler
-  displayName: "用户创建后处理器"
+  displayName: "User Post-Creation Handler"
   type: MULTI_INSTANCE
-  description: "提供在用户创建之后执行自定义逻辑的扩展方式"
+  description: "Provides extension points for executing custom logic after user creation."

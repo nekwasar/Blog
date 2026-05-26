@@ -249,7 +249,7 @@ items:
           "spec": {
             "recipient": "admin",
             "reason": "fake-reason",
-            "title": "test 评论了你的页面《关于我》",
+            "title": "test commented on your page \"About\"",
             "rawContent": "Fake raw content",
             "htmlContent": "<p>Fake html content</p>",
             "unread": true
@@ -272,7 +272,7 @@ items:
       statusCode: 200
       verify:
         - data.spec.reason == "fake-reason"
-        - data.spec.title == "test 评论了你的页面《关于我》"
+        - data.spec.title == "test commented on your page \"About\""
   - name: deleteUserNotification
     request:
       api: |

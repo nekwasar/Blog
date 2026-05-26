@@ -21,10 +21,10 @@ services:
     command:
       - --spring.r2dbc.url=r2dbc:pool:postgresql://postgres/halo
       - --spring.r2dbc.username=halo
-      # PostgreSQL 的密码，请保证与下方 POSTGRES_PASSWORD 的变量值一致。
+      # PostgreSQL password, ensure it matches the POSTGRES_PASSWORD value below.
       - --spring.r2dbc.password=openpostgresql
       - --spring.sql.init.platform=postgresql
-      # 外部访问地址，请根据实际需要修改
+      # External access URL, modify as needed
       # - --halo.external-url=http://localhost:8090/
     ports:
       - 8090:8090

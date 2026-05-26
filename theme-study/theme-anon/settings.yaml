@@ -9,111 +9,111 @@ spec:
       formSchema:
         - $formkit: select
           name: post_list_layout
-          label: Posts列表布局
+          label: Posts Layout
           value: grid_3
           options:
-            - label: 网格（一行三列）
+            - label: Grid (3 columns)
               value: grid_3
-            - label: 网格（一行两列）
+            - label: Grid (2 columns)
               value: grid_2
-            - label: 单条
+            - label: Single
               value: single
-          help: "选择单条时，文章卡片的图片将位于左侧"
+          help: "When set to Single, post card images will be positioned on the left."
         - $formkit: select
           name: header_widget
           id: header_widget
-          label: 首页顶部模块
+          label: Header Widget
           value: latest_post
           options:
-            - label: 无
+            - label: None
               value: none
-            - label: 最新一篇文章
+            - label: Latest Post
               value: latest_post
-            - label: Posts网格（最新五篇文章）
+            - label: Post Grid (Latest 5 Posts)
               value: latest_post_grid
-            - label: 站点标题
+            - label: Site Title
               value: site_title
         - $formkit: select
           if: "$get(header_widget).value !== none"
           name: header_background_type
           id: header_background_type
           key: header_background_type
-          label: 首页顶部背景
+          label: Header Background
           value: image
           options:
-            - label: 手动设置
+            - label: Manual
               value: manual
-            - label: 图片
+            - label: Image
               value: image
         - $formkit: text
           if: "$get(header_widget).value !== none && $get(header_background_type).value === manual"
           name: header_background
-          label: 首页顶部背景
+          label: Header Background
         - $formkit: attachment
           if: "$get(header_widget).value !== none && $get(header_background_type).value === image"
           name: header_background_image
-          label: 首页顶部背景图片
+          label: Header Background Image
     - group: style
       label: Style
       formSchema:
         - $formkit: select
           name: color_scheme
-          label: 默认配色
+          label: Default Color Scheme
           value: system
           options:
-            - label: 跟随系统
+            - label: Follow System
               value: system
-            - label: 深色
+            - label: Dark
               value: dark
-            - label: 浅色
+            - label: Light
               value: light
         - $formkit: checkbox
           name: enable_change_color_scheme
-          label: 允许访客切换配色
+          label: Allow Visitors to Toggle Color Scheme
           value: true
         - $formkit: checkbox
           name: show_scroll_button
-          label: 显示滚动到顶部按钮
+          label: Show Scroll-to-Top Button
           value: true
     - group: post
       label: Posts
       formSchema:
         - $formkit: select
           name: content_style
-          label: 内容样式
+          label: Content Style
           value: "github"
           options:
-            - label: GitHub 风格
+            - label: GitHub Style
               value: github
             - label: Tailwind CSS Typography
               value: tailwind
         - $formkit: select
           name: title_position
-          label: 标题位置
+          label: Title Position
           value: "content"
           options:
             - value: "content"
-              label: "正文中"
+              label: "In Content"
             - value: "cover"
-              label: "封面中"
+              label: "In Cover"
         - $formkit: text
           name: cover_height
-          label: 封面图高度
+          label: Cover Image Height
           value: "24rem"
         - $formkit: checkbox
           name: show_upvote_button
-          label: 显示点赞按钮
+          label: Show Upvote Button
           value: true
         - $formkit: checkbox
           name: show_share_button
-          label: 显示分享按钮
+          label: Show Share Button
           value: true
     - group: sidebar
       label: Sidebar
       formSchema:
         - $formkit: array
           name: widgets
-          label: 小部件
+          label: Widgets
           value:
             - value: popular-posts
             - value: categories
@@ -124,32 +124,32 @@ spec:
           children:
             - $formkit: select
               name: value
-              label: 部件
+              label: Widget
               options:
-                - label: 站点资料
+                - label: Profile
                   value: profile
-                - label: 热门文章
+                - label: Popular Posts
                   value: popular-posts
-                - label: Posts分类
+                - label: Categories
                   value: categories
-                - label: Posts标签
+                - label: Tags
                   value: tags
     - group: footer
       label: Footer
       formSchema:
         - $formkit: select
           name: style
-          label: Footer风格
+          label: Footer Style
           value: style_1
           options:
-            - label: 风格一
+            - label: Style 1
               value: style_1
         - $formkit: text
           name: slogan
-          label: 标语
+          label: Slogan
         - $formkit: array
           name: social_media
-          label: 社交媒体
+          label: Social Media
           value: []
           itemLabels:
             - type: "text"
@@ -157,7 +157,7 @@ spec:
           children:
             - $formkit: select
               name: icon
-              label: 图标
+              label: Icon
               options:
                 - label: GitHub
                   value: i-simple-icons-github
@@ -171,18 +171,18 @@ spec:
                   value: i-tabler-mail
             - $formkit: text
               name: name
-              label: 名称
+              label: Name
             - $formkit: text
               name: url
-              label: 链接
+              label: URL
               validation: "required"
     - group: beian
       label: Legal
       formSchema:
         - $formkit: text
           name: icp_text
-          label: ICP备案号
+          label: ICP Filing Number
         - $formkit: text
           name: icp_link
-          label: ICP备案跳转链接
+          label: ICP Filing Link
           value: https://beian.miit.gov.cn/

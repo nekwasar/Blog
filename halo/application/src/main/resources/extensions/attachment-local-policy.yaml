@@ -3,7 +3,7 @@ kind: PolicyTemplate
 metadata:
   name: local
 spec:
-  displayName: 本地存储
+  displayName: Local Storage
   settingName: local-policy-template-setting
 ---
 apiVersion: storage.halo.run/v1alpha1
@@ -13,7 +13,7 @@ metadata:
   finalizers:
     - system-protection
 spec:
-  displayName: 本地存储
+  displayName: Local Storage
   templateName: local
   configMapName: default-policy-config
 ---
@@ -38,75 +38,75 @@ spec:
       formSchema:
         - $formkit: text
           name: location
-          label: 存储位置
-          help: ~/.halo2/attachments/upload 下的子目录
+          label: Storage Location
+          help: Subdirectory under ~/.halo2/attachments/upload
         - $formkit: text
           name: maxFileSize
-          label: 最大单文件大小
+          label: Max File Size
           validation: [["matches", '/^(0|[1-9]\d*)(?:[KMG]B)?$/']]
           validation-visibility: "live"
           validation-messages:
-            matches: "输入格式错误，遵循：整数 + 大写的单位（KB, MB, GB）"
-          help: "0 表示不限制，示例：5KB、10MB、1GB"
+            matches: "Invalid format. Use: integer + uppercase unit (KB, MB, GB)"
+          help: "0 means no limit. Examples: 5KB, 10MB, 1GB"
         - $formkit: checkbox
           name: allowedFileTypes
-          label: 文件类型限制
-          help: 限制允许上传的文件类型
+          label: File Type Restrictions
+          help: Restrict allowed file types for upload
           options:
-            - label: 无限制
+            - label: No Restrictions
               value: ALL
-            - label: 图片
+            - label: Images
               value: IMAGE
             - label: SVG
               value: SVG
-            - label: 视频
+            - label: Video
               value: VIDEO
-            - label: 音频
+            - label: Audio
               value: AUDIO
-            - label: 文档
+            - label: Documents
               value: DOCUMENT
-            - label: 压缩包
+            - label: Archives
               value: ARCHIVE
         - $formkit: checkbox
           name: alwaysRenameFilename
           id: alwaysRenameFilename
-          label: 是否总是重命名文件名
-          help: 勾选后上传后的文件名将被重命名
+          label: Always Rename Files
+          help: If checked, uploaded files will be renamed
           value: false
         - $formkit: group
           if: $get(alwaysRenameFilename).value
           id: renameStrategy
           name: renameStrategy
-          label: 重命名策略
+          label: Rename Strategy
           value:
             method: RANDOM
             randomLength: 32
           children:
             - $formkit: radio
               name: method
-              label: 重命名方法
+              label: Rename Method
               options:
-                - label: 随机字符串
+                - label: Random String
                   value: RANDOM
                 - label: UUID
                   value: UUID
-                - label: 时间戳（毫秒级）
+                - label: Timestamp (milliseconds)
                   value: TIMESTAMP
             - $formkit: number
               number: integer
               if: "$value.method === RANDOM"
               name: randomLength
               id: randomLength
-              label: 随机文件名长度
-              help: 默认值为 32。因为文件名的长度限制，随机文件名的长度范围为 [8, 64]。
+              label: Random Filename Length
+              help: Default is 32. Due to filename length limits, the range is [8, 64].
               validation: "between:8,64"
               validation-visibility: live
               min: 8
               max: 64
             - $formkit: checkbox
               name: excludeOriginalFilename
-              label: 是否排除原始文件名
-              help: 勾选后重命名后的文件名将不包含原始文件名
+              label: Exclude Original Filename
+              help: If checked, the renamed file will not include the original filename
 ---
 apiVersion: storage.halo.run/v1alpha1
 kind: Group

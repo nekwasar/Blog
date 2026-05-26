@@ -3,8 +3,8 @@ kind: NotifierDescriptor
 metadata:
   name: default-email-notifier
 spec:
-  displayName: "邮件通知"
-  description: "通过邮件将通知发送给用户"
+  displayName: "Email Notification"
+  description: "Send notifications to users via email"
   notifierExtName: "halo-email-notifier"
   senderSettingRef:
     name: "notifier-setting-for-email"
@@ -17,43 +17,43 @@ metadata:
 spec:
   forms:
     - group: sender
-      label: 发件设置
+      label: Sender Settings
       formSchema:
         - $formkit: checkbox
-          label: "启用邮件通知器"
+          label: "Enable Email Notifier"
           value: false
           name: enable
         - $formkit: verificationForm
           if: "$enable"
           action: /apis/console.api.notification.halo.run/v1alpha1/notifiers/default-email-notifier/verify-connection
-          label: 测试邮箱
+          label: Test Email
           children:
             - $formkit: text
-              label: "用户名"
+              label: "Username"
               name: username
               validation: required
             - $formkit: text
               if: "$enable"
-              label: "发信地址"
+              label: "Sender Address"
               name: "sender"
-              help: "如果用户名为实际发信地址，可忽略"
+              help: "Leave empty if username is the actual sender address"
             - $formkit: password
-              label: "密码"
+              label: "Password"
               name: password
               validation: required
             - $formkit: text
-              label: "显示名称"
+              label: "Display Name"
               name: displayName
             - $formkit: text
-              label: "SMTP 服务器地址"
+              label: "SMTP Server Host"
               name: host
               validation: required
             - $formkit: text
-              label: "端口号"
+              label: "Port"
               name: port
               validation: required
             - $formkit: select
-              label: "加密方式"
+              label: "Encryption"
               name: encryption
               value: "SSL"
               options:
@@ -61,7 +61,7 @@ spec:
                   value: "SSL"
                 - label: "TLS"
                   value: "TLS"
-                - label: "不加密"
+                - label: "None"
                   value: "NONE"
 ---
 apiVersion: notification.halo.run/v1alpha1
@@ -72,8 +72,8 @@ metadata:
     rbac.authorization.halo.run/ui-permissions: |
       [ "uc:posts:publish" ]
 spec:
-  displayName: "我的文章收到新评论"
-  description: "如果有读者在你的文章下方留下了新的评论，你将会收到一条通知，告诉你有新的评论。这个通知事件可以帮助你及时了解读者对你的文章的反馈，以便你更好地与读者互动，提高文章的质量和受欢迎程度。"
+  displayName: "New comment on my post"
+  description: "When a reader leaves a new comment on your post, you will receive a notification. This helps you stay engaged with your audience."
   properties:
     - name: postName
       type: string
@@ -103,8 +103,8 @@ metadata:
     rbac.authorization.halo.run/ui-permissions: |
       [ "system:singlepages:manage" ]
 spec:
-  displayName: "我的自定义页面收到新评论"
-  description: "当你创建的自定义页面收到新评论时，你将会收到一条通知，告诉你有新的评论。"
+  displayName: "New comment on my page"
+  description: "When a reader leaves a new comment on your custom page, you will receive a notification."
   properties:
     - name: pageName
       type: string
@@ -131,8 +131,8 @@ kind: ReasonType
 metadata:
   name: someone-replied-to-you
 spec:
-  displayName: "有人回复了我"
-  description: "如果有其他用户回复了你的评论，你将会收到一条通知，告诉你有人回复了你。"
+  displayName: "Someone replied to me"
+  description: "When another user replies to your comment, you will receive a notification."
   properties:
     - name: commentName
       type: string
@@ -172,8 +172,8 @@ metadata:
   labels:
     halo.run/hidden: "true"
 spec:
-  displayName: "邮箱验证"
-  description: "当你的邮箱被用于注册账户时，会收到一条带有验证码的邮件，你需要点击邮件中的链接来验证邮箱是否属于你。"
+  displayName: "Email Verification"
+  description: "When your email is used to register an account, you will receive an email with a verification code to verify your email address."
   properties:
     - name: username
       type: string
@@ -192,8 +192,8 @@ metadata:
   labels:
     halo.run/hidden: "true"
 spec:
-  displayName: "根据邮件地址重置密码"
-  description: "当你通过邮件地址找回密码时，会收到一条带密码重置链接的邮件，你需要点击邮件中的链接来重置密码。"
+  displayName: "Reset password via email"
+  description: "When you request a password reset via email, you will receive an email with a password reset link."
   properties:
     - name: username
       type: string
@@ -210,8 +210,8 @@ kind: ReasonType
 metadata:
   name: new-device-login
 spec:
-  displayName: "新设备登录"
-  description: "当你的账户在新设备上登录时，你会收到一条通知，告诉你有新设备登录了你的账户。"
+  displayName: "New device login"
+  description: "When your account is used to sign in from a new device, you will receive a notification."
   properties:
     - name: os
       type: string

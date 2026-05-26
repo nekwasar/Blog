@@ -60,7 +60,7 @@
             </div>
         </nav>
 
-        <aside class="mobile-aside" :class="{ 'open': mobileMenu }" x-show="mobileMenu" x-cloak
+        <aside class="mobile-aside" :class="{ 'open': mobileMenu }"
                th:with="menus = ${menuFinder.getPrimary()}">
             <div class="aside-overlay" @click="mobileMenu = false; document.body.classList.remove('site-overflow')"></div>
             <div class="aside-body">

@@ -7,29 +7,27 @@ spec:
     reasonType: new-comment-on-post
     language: default
   template:
-    title: "[(${commenter})] 评论了你的文章《[(${postTitle})]》"
+    title: "[(${commenter})] commented on your post \"[(${postTitle})]\""
     rawBody: |
-      [(${subscriber.displayName})] 你好：
+      Hello [(${subscriber.displayName})],
 
-        [(${commenter})] 评论了你的文章 《[(${postTitle})]》，以下是评论的具体内容：
+        [(${commenter})] commented on your post "[(${postTitle})]":
 
         [(${content})]
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${subscriber.displayName} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${subscriber.displayName}:|"></p>
         </div>
         <div class="body">
           <p>
-            <span th:text="${commenter}"></span> 评论了你的文章
-            <a th:href="${postUrl}" target="_blank" th:text="|《${postTitle}》|"></a>
-            <span>，以下是评论的具体内容：</span>
+            <span th:text="${commenter}"></span> commented on your post
+            <a th:href="${postUrl}" target="_blank" th:text="|${postTitle}|"></a>:
           </p>
           <div class="content" th:utext="${content}"></div>
         </div>
         <div></div>
       </div>
-
 ---
 apiVersion: notification.halo.run/v1alpha1
 kind: NotificationTemplate
@@ -40,29 +38,26 @@ spec:
     reasonType: new-comment-on-single-page
     language: default
   template:
-    title: "[(${commenter})] 评论了你的页面《[(${pageTitle})]》"
+    title: "[(${commenter})] commented on your page \"[(${pageTitle})]\""
     rawBody: |
-      [(${subscriber.displayName})] 你好：
+      Hello [(${subscriber.displayName})],
 
-        [(${commenter})] 评论了你的页面 《[(${pageTitle})]》，以下是评论的具体内容：
+        [(${commenter})] commented on your page "[(${pageTitle})]":
 
         [(${content})]
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${subscriber.displayName} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${subscriber.displayName}:|"></p>
         </div>
         <div class="body">
           <p>
-            <span th:text="${commenter}"></span> 评论了你的页面
-            <a th:href="${pageUrl}" target="_blank" th:text="|《${pageTitle}》|"></a>
-            <span>，以下是评论的具体内容：</span>
+            <span th:text="${commenter}"></span> commented on your page
+            <a th:href="${pageUrl}" target="_blank" th:text="|${pageTitle}|"></a>:
           </p>
           <div class="content" th:utext="${content}"></div>
         </div>
-        <div></div>
       </div>
-
 ---
 apiVersion: notification.halo.run/v1alpha1
 kind: NotificationTemplate
@@ -73,34 +68,28 @@ spec:
     reasonType: someone-replied-to-you
     language: default
   template:
-    title: "[(${replier})] 在评论中回复了你"
+    title: "[(${replier})] replied to your comment"
     rawBody: |
-      [(${subscriber.displayName})] 你好：
+      Hello [(${subscriber.displayName})],
 
-        [(${replier})] 在评论“[(${isQuoteReply ? quoteContent : commentContent})]”中回复了你，以下是回复的具体内容：
+        [(${replier})] replied to your comment "[(${isQuoteReply ? quoteContent : commentContent})]":
 
         [(${content})]
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${subscriber.displayName} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${subscriber.displayName}:|"></p>
         </div>
         <div class="body">
           <p>
-            <span th:text="${replier}"></span> 在
-            <a
-              th:href="${commentSubjectUrl}"
-              target="_blank"
-              th:text="|《${commentSubjectTitle}》|"
-            ></a>
-            <span>中回复了你。</span>
+            <span th:text="${replier}"></span> replied to your comment
+            <span th:text="|"${isQuoteReply ? quoteContent : commentContent}"|"></span>:
           </p>
-          <p>你的评论：</p>
-          <div class="content" th:utext="${isQuoteReply ? quoteContent : commentContent}"></div>
-          <p>回复的内容：</p>
+          <p>Your comment:</p>
+          <div class="quoted-content" th:utext="${isQuoteReply ? quoteContent : commentContent}"></div>
+          <p>Reply:</p>
           <div class="content" th:utext="${content}"></div>
         </div>
-        <div></div>
       </div>
 ---
 apiVersion: notification.halo.run/v1alpha1
@@ -112,21 +101,21 @@ spec:
     reasonType: email-verification
     language: default
   template:
-    title: "邮箱验证-[(${site.title})]"
+    title: "Email Verification - [(${site.title})]"
     rawBody: |
-      【[(${site.title})]】你的邮箱验证码是：[(${code})]，请在 [(${expirationAtMinutes})] 分钟内完成验证。
+      [[(${site.title})]] Your email verification code is: [(${code})]. Please complete verification within [(${expirationAtMinutes})] minutes.
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${username} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${username}:|"></p>
         </div>
         <div class="body">
-          <p>使用下面的动态验证码（OTP）验证您的电子邮件地址。</p>
+          <p>Use the following OTP to verify your email address.</p>
           <div class="verify-code" style="font-size:24px;line-height:24px;color:#333;">
             <b th:text="${code}"></b>
           </div>
-          <p th:text="|动态验证码的有效期为 ${expirationAtMinutes} 分钟。|"></p>
-          <p>如果您没有尝试验证您的电子邮件地址，请忽略此电子邮件。</p>
+          <p th:text="|The OTP is valid for ${expirationAtMinutes} minutes.|"></p>
+          <p>If you did not attempt to verify your email address, please ignore this email.</p>
         </div>
       </div>
 ---
@@ -139,21 +128,21 @@ spec:
     reasonType: reset-password-by-email
     language: default
   template:
-    title: "重置密码-[(${site.title})]"
+    title: "Password Reset - [(${site.title})]"
     rawBody: |
-      【[(${site.title})]】你已经请求了重置密码，可以链接来重置密码：[(${link})]，请在 [(${expirationAtMinutes})] 分钟内完成重置。
+      [[(${site.title})]] You have requested a password reset. Use this link to reset your password: [(${link})]. The link is valid for [(${expirationAtMinutes})] minutes.
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${username} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${username}:|"></p>
         </div>
         <div class="body">
-          <p>你已经请求了重置密码，可以点击下面的链接来重置密码：</p>
+          <p>You have requested a password reset. Click the link below to reset your password:</p>
           <div class="reset-link" style="line-height:24px;">
             <span th:text="${link}"></span>
           </div>
-          <p th:text="|链接有效期为 ${expirationAtMinutes} 分钟，请尽快完成重置。|"></p>
-          <p>如果您没有请求重置密码，请忽略此电子邮件。</p>
+          <p th:text="|The link is valid for ${expirationAtMinutes} minutes. Please complete the reset promptly.|"></p>
+          <p>If you did not request a password reset, please ignore this email.</p>
         </div>
       </div>
 ---
@@ -166,27 +155,27 @@ spec:
     reasonType: new-device-login
     language: default
   template:
-    title: "你的 [(${site.title})] 账号被用于在 [(${os})] 上登录"
+    title: "Your [(${site.title})] account was used to sign in on [(${os})]"
     rawBody: |
-      [(${subscriber.displayName})] 你好：
+      Hello [(${subscriber.displayName})],
 
-        你的 [(${site.title})] 账号被用于在 [(${os})] 的 [(${browser})] 上登录。
-        时间：[(${loginTime})]
-        IP 地址：[(${ipAddress})] 
-        如果你知悉上述信息，请忽略此电子邮件。
-        如果你最近没有使用你的 Halo 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。
+        Your [(${site.title})] account was used to sign in on [(${os})] using [(${browser})].
+        Time: [(${loginTime})]
+        IP Address: [(${ipAddress})]
+        If this was you, please ignore this email.
+        If you haven't signed in recently and believe someone may have accessed your account, please reset your password immediately.
     htmlBody: |
       <div class="notification-content">
         <div class="head">
-          <p class="honorific" th:text="|${subscriber.displayName} 你好：|"></p>
+          <p class="honorific" th:text="|Hello ${subscriber.displayName}:|"></p>
         </div>
         <div class="body">
-          <p th:text="|你的 ${site.title} 账号被用于在 ${os} 的 ${browser} 上登录：|"></p>
+          <p th:text="|Your ${site.title} account was used to sign in on ${os} using ${browser}:|"></p>
           <div class="device-info">
-            <p th:text="|时间： ${loginTime}|"></p>
-            <p th:text="|IP 地址： ${ipAddress}|"></p>
+            <p th:text="|Time: ${loginTime}|"></p>
+            <p th:text="|IP Address: ${ipAddress}|"></p>
           </div>
-          <p>如果你知悉上述信息，请忽略此电子邮件。</p>
-          <p th:text="|如果你最近没有使用你的 ${site.title} 账号登录并相信有人可能访问了你的账户，请尽快重设你的密码。|"></p>
+          <p>If this was you, please ignore this email.</p>
+          <p th:text="|If you haven't signed in recently and believe someone may have accessed your account, please reset your password immediately.|"></p>
         </div>
       </div>

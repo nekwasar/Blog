@@ -5,14 +5,14 @@ metadata:
 spec:
   forms:
     - group: basic
-      label: 基本设置
+      label: Basic
       formSchema:
         - $formkit: text
-          label: "站点标题"
+          label: "Site Title"
           name: title
           validation: required
         - $formkit: text
-          label: "站点副标题"
+          label: "Site Subtitle"
           name: subtitle
         - $formkit: attachment
           label: Logo
@@ -27,7 +27,7 @@ spec:
           accepts:
             - "image/*"
         - $formkit: select
-          label: "首选语言"
+          label: "Preferred Language"
           name: language
           value: "zh-CN"
           options:
@@ -35,104 +35,104 @@ spec:
               value: "en"
             - label: "Español"
               value: "es"
-            - label: "简体中文"
+            - label: "Simplified Chinese"
               value: "zh-CN"
-            - label: "繁体中文"
+            - label: "Traditional Chinese"
               value: "zh-TW"
     - group: post
-      label: 文章设置
+      label: Post Settings
       formSchema:
         - $formkit: number
-          label: "文章列表显示条数"
+          label: "Posts per page on post list"
           name: postPageSize
           value: 10
           min: 1
           max: 100
           validation: required | max:100
         - $formkit: number
-          label: "归档页文章显示条数"
+          label: "Posts per page on archive"
           name: archivePageSize
           value: 10
           min: 1
           max: 100
           validation: required | max:100
         - $formkit: number
-          label: "分类页文章显示条数"
+          label: "Posts per page on category"
           name: categoryPageSize
           value: 10
           min: 1
           max: 100
           validation: required | max:100
         - $formkit: number
-          label: "标签页文章显示条数"
+          label: "Posts per page on tag"
           name: tagPageSize
           value: 10
           min: 1
           max: 100
           validation: required
         - $formkit: number
-          label: "作者页文章显示条数"
+          label: "Posts per page on author"
           name: authorPageSize
           value: 10
           min: 1
           max: 100
           validation: required
         - $formkit: select
-          label: "别名生成策略"
+          label: "Slug Generation Strategy"
           name: slugGenerationStrategy
           value: "generateByTitle"
           options:
-            - label: "根据标题"
+            - label: "From title"
               value: "generateByTitle"
-            - label: "时间戳"
+            - label: "Timestamp"
               value: "timestamp"
             - label: "Short UUID"
               value: "shortUUID"
             - label: "UUID"
               value: "UUID"
-          help: 此选项仅在创建文章时生效，修改此选项不会影响已有文章
+          help: This option only applies to new posts. Changing it will not affect existing posts.
         - $formkit: attachmentPolicySelect
           name: attachmentPolicyName
-          label: "附件存储策略"
+          label: "Attachment Storage Policy"
           value: "default-policy"
-          help: 用于指定在文章编辑器中上传的默认附件存储策略（已过时，请使用附件配置中的管理端附件配置）
+          help: Specifies the default attachment storage policy for the post editor (deprecated, use the attachment configuration in attachment settings instead)
         - $formkit: attachmentGroupSelect
           name: attachmentGroupName
-          label: "附件存储组"
+          label: "Attachment Storage Group"
           value: ""
-          help: 用于指定在文章编辑器中上传的默认附件存储分组（已过时，请使用附件配置中的管理端附件配置）
+          help: Specifies the default attachment storage group for the post editor (deprecated, use the attachment configuration in attachment settings instead)
     - group: seo
-      label: SEO 设置
+      label: SEO Settings
       formSchema:
         - $formkit: checkbox
           name: blockSpiders
-          label: "屏蔽搜索引擎"
+          label: "Block Search Engines"
           value: false
-          help: '为所有页面添加 <meta name="robots" content="noindex" /> 标签，阻止搜索引擎索引，但不是所有搜索引擎都会遵守'
+          help: 'Adds <meta name="robots" content="noindex" /> to all pages to block search engine indexing. Note that not all search engines respect this directive.'
         - $formkit: textarea
           name: keywords
-          label: "站点关键词"
-          help: "目前主流搜索引擎已经不再使用此字段，所以通常不建议设置，此选项可能在未来版本中被移除"
+          label: "Site Keywords"
+          help: "Major search engines no longer use this meta tag, so it is generally not recommended. This option may be removed in a future version."
           auto-height: true
         - $formkit: textarea
           name: description
-          label: "站点描述"
-          help: "仅对首页生效，其他页面将根据页面类型自动生成描述"
+          label: "Site Description"
+          help: "Only applies to the homepage. Other pages will auto-generate descriptions based on their content."
           auto-height: true
     - group: user
-      label: 用户设置
+      label: User Settings
       formSchema:
         - $formkit: checkbox
           name: allowRegistration
           id: allowRegistration
           key: allowRegistration
-          label: "开放注册"
+          label: "Allow Registration"
           value: false
         - $formkit: checkbox
           name: mustVerifyEmailOnRegistration
-          label: "注册需验证邮箱"
+          label: "Require Email Verification on Registration"
           if: "$get(allowRegistration).value === true"
-          help: "需要确保已经正确配置邮件通知器"
+          help: "Requires the email notifier to be properly configured."
           value: false
         - $formkit: textarea
           name: protectedUsernames
@@ -142,100 +142,100 @@ spec:
           value: "admin,administrator,root,system,superuser,guest,test,demo,user,backup,ftp,www,manager,support,service,api"
         - $formkit: roleSelect
           name: defaultRole
-          label: "默认角色"
+          label: "Default Role"
           validation: "required"
           if: "$get(allowRegistration).value === true"
-          help: 用户注册之后默认为用户分配的角色
+          help: The role assigned to new users by default after registration.
         - $formkit: attachmentPolicySelect
           name: avatarPolicy
-          label: "头像存储位置"
+          label: "Avatar Storage Policy"
           value: "default-policy"
-          help: 指定用户上传头像的存储策略（已过时，请使用附件配置中的头像附件配置）
+          help: Specifies the storage policy for user avatars (deprecated, use the avatar attachment configuration in attachment settings instead)
         - $formkit: attachmentPolicySelect
           name: ucAttachmentPolicy
-          label: "个人中心附件存储位置"
+          label: "User Center Attachment Policy"
           value: "default-policy"
-          help: 指定用户在个人中心上传的附件的存储位置（已过时，请使用附件配置中的个人中心附件配置）
+          help: Specifies the storage policy for attachments uploaded from the user center (deprecated, use the user center attachment configuration in attachment settings instead)
     - group: attachment
-      label: 附件配置
+      label: Attachment Settings
       formSchema:
         - $formkit: group
           name: console
-          label: 管理端附件配置
-          help: 为管理端直接上传附件的地方设置默认的存储策略和分组
+          label: Admin Attachment Settings
+          help: Set the default storage policy and group for attachments uploaded directly from the admin console
           children:
             - $formkit: attachmentPolicySelect
               name: policyName
-              label: "存储策略"
+              label: "Storage Policy"
               auto-select: false
             - $formkit: attachmentGroupSelect
               name: groupName
-              label: "存储组"
+              label: "Storage Group"
               auto-select: false
               clearable: true
         - $formkit: group
           name: uc
-          label: 个人中心附件配置
-          help: 为个人中心直接上传附件的地方设置默认的存储策略和分组，处于安全考虑，建议为所选存储策略限制文件类型和大小
+          label: User Center Attachment Settings
+          help: Set the default storage policy and group for attachments uploaded from the user center. For security, it is recommended to restrict file types and sizes for the selected storage policy.
           children:
             - $formkit: attachmentPolicySelect
               name: policyName
-              label: "存储策略"
+              label: "Storage Policy"
               auto-select: false
             - $formkit: attachmentGroupSelect
               name: groupName
-              label: "存储组"
+              label: "Storage Group"
               auto-select: false
               clearable: true
         - $formkit: group
           name: avatar
-          label: 头像附件配置
-          help: 为用户头像设置存储策略，处于安全考虑，建议为所选存储策略限制文件类型和大小
+          label: Avatar Attachment Settings
+          help: Set the storage policy for user avatars. For security, it is recommended to restrict file types and sizes for the selected storage policy.
           children:
             - $formkit: attachmentPolicySelect
               name: policyName
-              label: "存储策略"
+              label: "Storage Policy"
     - group: comment
-      label: 评论设置
+      label: Comment Settings
       formSchema:
         - $formkit: checkbox
           name: enable
           value: true
-          label: "启用评论"
+          label: "Enable Comments"
         - $formkit: checkbox
           name: requireReviewForNew
           value: true
-          label: "新评论审核"
-          help: 开启之后，新评论需要管理员审核后才会显示
+          label: "Require Review for New Comments"
+          help: When enabled, new comments require admin approval before being displayed.
         - $formkit: checkbox
           name: systemUserOnly
           value: true
-          label: "仅允许注册用户评论"
+          label: "Registered users only"
     - group: routeRules
-      label: 主题路由设置
+      label: Theme Route Settings
       formSchema:
         - $formkit: checkbox
-          label: "关闭主题预览"
+          label: "Disable Theme Preview"
           value: false
           name: disableThemePreview
-          help: "关闭后，未包含主题管理权限的用户将无法通过参数预览未激活的主题"
+          help: "When disabled, users without theme management permissions cannot preview inactive themes via URL parameters."
         - $formkit: text
-          label: "分类页路由前缀"
+          label: "Category Route Prefix"
           value: "categories"
           name: categories
           validation: required | alphanumeric
         - $formkit: text
-          label: "标签页路由前缀"
+          label: "Tag Route Prefix"
           value: "tags"
           name: tags
           validation: required | alphanumeric
         - $formkit: text
-          label: "归档页路由前缀"
+          label: "Archive Route Prefix"
           value: "archives"
           name: archives
           validation: required | alphanumeric
         - $formkit: select
-          label: 文章详情页访问规则
+          label: Post Detail Page URL Pattern
           value: "/archives/{slug}"
           options:
             - label: "/archives/{slug}"
@@ -257,23 +257,23 @@ spec:
           name: post
           validation: required
     - group: codeInjection
-      label: 代码注入
+      label: Code Injection
       formSchema:
         - $formkit: code
           language: html
           height: 200px
-          label: "全局 head 标签"
+          label: "Global Head Tags"
           name: globalHead
-          help: "注入代码到所有页面的 head 标签部分"
+          help: "Inject code into the head section of all pages."
         - $formkit: code
           language: html
           height: 200px
-          label: "内容页 head 标签"
+          label: "Content Page Head Tags"
           name: contentHead
-          help: "注入代码到文章页面和自定义页面的 head 标签部分"
+          help: "Inject code into the head section of posts and custom pages."
         - $formkit: code
           language: html
           height: 200px
-          label: "页脚"
+          label: "Footer"
           name: footer
-          help: "注入代码到所有页面的页脚部分"
+          help: "Inject code into the footer section of all pages."

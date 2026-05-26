@@ -21,7 +21,7 @@ metadata:
   finalizers:
     - system-protection
 spec:
-  displayName: 已删除用户
+  displayName: Deleted User
   email: ghost@example.com
   disabled: true
-  bio: 该用户已被删除。
+  bio: This user has been deleted.

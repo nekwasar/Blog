@@ -39,7 +39,7 @@ const i18n = createI18n({
 });
 
 export function getEnvironmentLanguage(): string {
-  return getCookie("language") || navigator.language;
+  return getCookie("language") || "en";
 }
 
 export function getLocaleDefinition(

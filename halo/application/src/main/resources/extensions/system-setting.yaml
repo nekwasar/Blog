@@ -136,10 +136,10 @@ spec:
           value: false
         - $formkit: textarea
           name: protectedUsernames
-          label: "保留用户名与名称"
+          label: "Reserved Usernames"
           if: "$get(allowRegistration).value === true"
-          help: 保留用户名与名称，限制用户注册或编辑资料时使用，多个请用英文逗号,分隔，留空则不限制
-          value: "admin,administrator,root,system,superuser,guest,test,demo,user,backup,ftp,www,manager,support,service,api,超级管理员,管理员"
+          help: Reserved usernames that cannot be used for registration or profile editing. Separate multiple entries with commas. Leave empty for no restriction.
+          value: "admin,administrator,root,system,superuser,guest,test,demo,user,backup,ftp,www,manager,support,service,api"
         - $formkit: roleSelect
           name: defaultRole
           label: "默认角色"

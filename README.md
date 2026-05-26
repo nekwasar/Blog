@@ -1,17 +1,12 @@
 <div align="center">
   <br>
-  <pre style="font-size:1.5em;color:#8B5CF6">
-▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-█▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
-█  ⚡ NEKWASAR BLOG ⚡               █
-█  fork of halo · theme: anon       █
-█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+  <pre style="font-size:1.2em;color:#8B5CF6">
++---------------------------------------+
+|         NEKWASAR BLOG                 |
+|     fork of halo / theme: anon        |
++---------------------------------------+
   </pre>
   <br>
-  <img src="https://img.shields.io/badge/STATUS-ACTIVE-8B5CF6?style=for-the-badge&labelColor=0f0f13" alt="Status">
-  <img src="https://img.shields.io/badge/LICENSE-GPLv3-8B5CF6?style=for-the-badge&labelColor=0f0f13" alt="License">
-  <br><br>
 </div>
 
 ---

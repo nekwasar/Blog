@@ -57,7 +57,7 @@ const handleDelete = () => {
         return;
       }
 
-      // TODO: 后续将修改为在后端进行批量操作处理
+      // TODO: will be changed to backend batch processing
       const attachments = await fetchAllAttachmentsByGroupName(
         props.group.metadata.name
       );
@@ -122,7 +122,7 @@ const handleDeleteWithAttachments = () => {
         return;
       }
 
-      // TODO: 后续将修改为在后端进行批量操作处理
+      // TODO: will be changed to backend batch processing
       const attachments = await fetchAllAttachmentsByGroupName(
         props.group.metadata.name
       );

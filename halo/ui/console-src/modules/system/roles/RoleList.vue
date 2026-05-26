@@ -139,7 +139,7 @@ const handleCloneRole = async (role: Role) => {
     rules: [],
   };
 
-  // 如果是超级管理员角色，那么需要获取到所有角色模板并填充到表单
+  // if super-admin role, fetch all role templates and populate the form
   if (role.metadata.name === SUPER_ROLE_NAME) {
     const allRoleTemplates = await paginate<
       RoleV1alpha1ApiListRoleRequest,
@@ -251,8 +251,8 @@ const handleDelete = async (role: Role) => {
               ></VEntityField>
             </template>
             <template #end>
-              <!-- TODO: 支持显示用户数量 -->
-              <VEntityField v-if="false" description="0 个用户" />
+              <!-- TODO: display user count -->
+              <VEntityField v-if="false" description="0 users" />
               <VEntityField>
                 <template #description>
                   <VTag>

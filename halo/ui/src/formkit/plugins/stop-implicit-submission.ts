@@ -14,7 +14,7 @@ function handleKeydown(e: KeyboardEvent) {
   }
 }
 
-// 以下表单键入enter引起表单提交，
+// pressing enter in certain form types triggers implicit submission,
 //https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#implicit-submission
 const implicitSubmissionType = [
   "text",
@@ -44,8 +44,8 @@ const clearFormKeydownEventByPath = (fullPath: string) => {
   }
 };
 
-//https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener#%E5%8F%82%E6%95%B0
-//使用AbortSignal来取消事件监听
+//https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
+//use AbortSignal to cancel event listeners
 const inputPreventFn = (node: FormKitNode) => {
   const id = node.props.id ?? "";
   if (node.type == "group") {

@@ -12,7 +12,7 @@ const props = withDefaults(
     text?: string;
   }>(),
   {
-    text: "提交",
+    text: "Submit",
   }
 );
 

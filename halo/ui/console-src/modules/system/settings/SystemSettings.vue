@@ -70,7 +70,7 @@ const { data: setting } = useQuery({
           ...tabs.value,
           {
             id: "notification",
-            label: "通知设置",
+            label: "Notification Settings",
             component: defineAsyncComponent({
               loader: () => import("./tabs/Notifications.vue"),
               loadingComponent: VLoading,

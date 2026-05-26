@@ -1,17 +1,17 @@
-# 路由和 Console 端菜单的生成
+# Route and Console Menu Generation
 
-## 简述
+## Overview
 
-目前的路由以及菜单都是动态生成的，由 `基础路由`、`核心模块路由`、`插件模块路由` 三部分组成。
+Routes and menus are dynamically generated from three parts: base routes, core module routes, and plugin module routes.
 
-定义文件位置：
+Definition file locations:
 
-- 基础路由：`src/router/routes.config.ts`,
-- 核心模块路由：`src/modules/**/module.ts`,
+- Base routes: `src/router/routes.config.ts`
+- Core module routes: `src/modules/**/module.ts`
 
-## 定义方式
+## Definition Method
 
-统一由 `@halo-dev/ui-shared` 包中的 `definePlugin` 方法配置。如：
+All routes are defined using the `definePlugin` method from the `@halo-dev/ui-shared` package:
 
 ```ts
 import { definePlugin } from "@halo-dev/ui-shared";
@@ -34,10 +34,10 @@ export default definePlugin({
           name: "Attachments",
           component: AttachmentList,
           meta: {
-            title: "附件",
+            title: "Attachments",
             permissions: ["system:attachments:view"],
             menu: {
-              name: "附件",
+              name: "Attachments",
               group: "content",
               icon: markRaw(IconFolder),
               priority: 3,
@@ -51,7 +51,7 @@ export default definePlugin({
 });
 ```
 
-其中，如果要将路由添加到侧边的菜单，那么需要在 `meta` 中定义好 `menu` 对象，menu 对象类型详解如下：
+To add routes to the sidebar menu, define the `menu` object in `meta`:
 
 ```ts
 interface RouteMeta {
@@ -60,36 +60,36 @@ interface RouteMeta {
   permissions?: string[];
   core?: boolean;
   menu?: {
-    name: string;               // 菜单名称
-    group?: CoreMenuGroupId;    // 菜单分组 ID，详见下方 CoreMenuGroupId 定义
-    icon?: Component;           // 菜单图标，类型为 Vue 组件，可以使用 `@halo-dev/components` 包中的图标组件，或者自行接入 https://github.com/antfu/unplugin-icons
-    priority: number;           // 排序字段，相对于 group，插件中提供的菜单将始终放在最后
-    mobile?: boolean;           // 是否添加到移动端底部的菜单
+    name: string;               // Menu display name
+    group?: CoreMenuGroupId;    // Menu group ID
+    icon?: Component;           // Menu icon (Vue component)
+    priority: number;           // Sort order (plugin menus always come last)
+    mobile?: boolean;           // Show on mobile bottom nav
   };
 }
 ```
 
-CoreMenuGroupId：
+CoreMenuGroupId:
 
 ```ts
 declare type CoreMenuGroupId = "dashboard" | "content" | "interface" | "system" | "tool";
 ```
 
-这是核心内置的菜单分组，但如果插件需要自定义分组，可以直接填写分组名，如：
+For custom plugin groups, use any string:
 
 ```ts
 {
-  name: "帖子",
-  group: "社区",
-  icon: markRaw(IconCummunity),
+  name: "Posts",
+  group: "Community",
+  icon: markRaw(IconCommunity),
   priority: 1,
   mobile: false,
 }
 ```
 
-## 插件接入
+## Plugin Integration
 
-定义方式与系统核心模块的定义方式一致，在 `definePlugin` 方法配置即可。主要额外注意的是，如果插件的路由需要基础布局（继承 BasicLayout），需要配置 `parentName`，如：
+The definition approach is identical to core modules. If a plugin route needs the basic layout (extending BasicLayout), set `parentName`:
 
 ```ts
 export default definePlugin({
@@ -104,10 +104,10 @@ export default definePlugin({
             name: "Migrate",
             component: MigrateView,
             meta: {
-              title: "迁移",
+              title: "Migrate",
               searchable: true,
               menu: {
-                name: "迁移",
+                name: "Migrate",
                 group: "tool",
                 icon: markRaw(IconGrid),
                 priority: 0,
@@ -121,6 +121,6 @@ export default definePlugin({
 })
 ```
 
-## 权限
+## Permissions
 
-在 `meta` 中配置 `permissions` 即可。类型为 UI 权限标识的数组，如 `["system:attachments:view"]`。如果当前用户没有对应权限，那么将不会注册路由和菜单。
+Configure `permissions` in `meta` as an array of UI permission identifiers, e.g., `["system:attachments:view"]`. If the current user lacks the permission, the route and menu are not registered.

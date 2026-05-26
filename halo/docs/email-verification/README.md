@@ -1,31 +1,31 @@
-## 背景
+## Background
 
-在 Halo 中，邮箱作为用户主要的身份识别和通信方式，不仅有助于确保用户提供的邮箱地址的有效性和所有权，还对于减少滥用行为、提高账户安全性以及确保用户可以接收重要通知（如密码重置、注册新账户、确认重要操作等）至关重要。
+In Halo, email serves as the primary method for user identification and communication. It ensures the validity and ownership of a user's email address, reduces abuse, improves account security, and enables users to receive important notifications (password resets, new account registration, confirming critical operations, etc.).
 
-邮箱验证是用户管理过程中的一个关键组成部分，可以帮助维护了一个健康、可靠的用户基础，并且为系统管理员提供了一个额外的安全和管理手段，因此实现一个高效、安全且用户友好的邮箱验证功能至关重要。
+Email verification is a key component of user management. It helps maintain a healthy, reliable user base and provides administrators with an additional security and management tool. Implementing an efficient, secure, and user-friendly email verification feature is essential.
 
-## 需求
+## Requirements
 
-1. **用户注册验证**：确保新用户在注册过程中提供有效的邮箱地址。邮箱验证作为新用户激活其账户的必要步骤，有助于减少虚假账户和提升用户的整体质量。
-2. **密码重置和安全操作**：在用户忘记密码或需要重置密码时，向已验证的邮箱地址发送密码重置链接来确保安全性。
-3. **用户通知**：验证邮箱地址有助于确保用户可以接收到重要通知，如文章被评论、有新回复等。
+1. **User Registration Verification**: Ensure new users provide a valid email address during signup. Email verification as a necessary step for account activation helps reduce fake accounts and improves overall user quality.
+2. **Password Reset and Security Operations**: Send password reset links to verified email addresses when users forget their passwords or need to reset them.
+3. **User Notifications**: Verified email addresses ensure users can receive important notifications (comments on posts, new replies, etc.).
 
-## 目标
+## Goals
 
-- 支持用户在修改邮箱后支持重新进行邮箱验证。
-- 允许用户在未收到邮件或邮件过期时重新请求发送验证邮件。
-- 避免邮件通知被滥用，如频繁发送验证邮件，需要添加限制。
-- 验证码过期机制，以确保验证邮件的有效性和安全性。
+- Support re-verification after email changes.
+- Allow users to request a new verification email if they didn't receive it or it expired.
+- Prevent abuse (e.g., frequent verification email requests) by adding rate limits.
+- Verification code expiration to ensure security and validity.
 
-## 非目标
+## Non-Goals
 
-- 不考虑用户多邮箱地址的验证。
+- Multi-email address verification.
 
-## 方案
+## Design
 
 ### EmailVerificationManager
 
-通过使用 guava 提供的 Cache 来实现一个 EmailVerificationManager 来管理邮箱验证的缓存。
+Uses Guava's Cache to manage email verification state:
 
 ```java
 class EmailVerificationManager {
@@ -40,8 +40,7 @@ class EmailVerificationManager {
           .maximumSize(1000)
           .build();
 
-  record UsernameEmail(String username, String email) {
-  }
+  record UsernameEmail(String username, String email) {}
 
   @Data
   @Accessors(chain = true)
@@ -52,78 +51,78 @@ class EmailVerificationManager {
 }
 ```
 
-当用户请求发送验证邮件时，会生成一个随机的验证码，并将其存储在缓存中，默认有效期为 10 分钟，当十分钟内用户未验证成功，验证码会自动过期被缓存清除。
+When a user requests a verification email, a random code is generated and stored in the cache with a default 10-minute validity. If the user does not verify within 10 minutes, the code expires automatically.
 
-用户可以在十分钟内重新请求发送验证邮件，此时会生成一个新的验证码有效期依然为 10 分钟。但会限制用户发送频率，同一个用户的邮箱发送验证邮件的时间间隔不得小于
-1 分钟，以防止滥用。
+Users can request a new verification email within those 10 minutes, which generates a new code with another 10-minute validity. However, rate limiting prevents requesting more than once per minute to prevent abuse.
 
-当用户请求验证邮箱时，会从缓存中获取验证码，如果验证码不存在或已过期，会提示验证码无效或已过期，如果验证码存在且未过期，会进行验证码的比对，如果验证码不正确，会提示验证码无效，如果验证码正确，会将用户邮箱地址标记为已验证，并从缓存中清除验证码。
+When a user attempts to verify their email, the system looks up the code in the cache:
+- If the code doesn't exist or has expired → "invalid or expired code"
+- If the code doesn't match → "invalid code"
+- If the code matches → mark the email as verified and clear the code from cache
 
-如果用户反复使用 code 验证邮箱，会记录失败次数，如果达到了默认的最大尝试次数（默认为 5 次），将被加入黑名单，需要 1
-小时后才能重新验证邮件。
+If verification fails repeatedly and reaches the maximum attempt limit (default: 5), the user is blacklisted for 1 hour before they can try again.
 
-根据上述规则：
+Based on these rules:
 
-- 每个验证码有10分钟的有效期。
-- 在这10分钟内，如果失败次数超过5次，用户会被加入黑名单，禁止验证1小时。
-- 如果在10分钟内尝试了5次且失败，然后请求重新发送验证码，可以再次尝试5次。
+- Each code has a 10-minute validity.
+- If verification fails more than 5 times within 10 minutes, the user is blacklisted for 1 hour.
+- If the user requests a new code within 10 minutes after 5 failed attempts, they get 5 more attempts.
 
-那么：
+Calculations:
 
-- 在不触发黑名单的情况下，每10分钟可以尝试5次。
-- 一小时内，可以尝试 (60/10) * 5 = 30 次，前提是每10分钟都请求一次新的验证码。
-- 但是，如果在任何10分钟内尝试超过5次，则会被禁止1小时。
+- Without triggering a blacklist: 5 attempts per 10 minutes.
+- Per hour: (60/10) × 5 = 30 attempts (requesting a new code every 10 minutes).
+- If more than 5 attempts within any 10-minute window → blacklisted for 1 hour.
+- Maximum daily attempts without blacklist: 30 × 24 = 720.
+- Verification code: random 6 digits (000000–999999 = 10^6 combinations).
+- 10^6 / 720 ≈ 1388 days to brute force in the worst case — highly secure.
 
-因此，为了最大化尝试次数而不触发黑名单，每小时可以尝试 30 次，预计一天内（24h）最多可以尝试 720 次验证码。
-验证码的组成为随机的 6 为数字，可能组合总数：一个 6 位数字的验证码可以从 000000 到 999999，总共有 10 <sup>6</sup> 种可能的组合。
-10 <sup>6</sup> / 720 = 1388，因此，预计最坏情况下需要 1388 天可以破解验证码。这个时间足够长，可以认为非常安全的。
+### API Endpoints
 
-### 提供 APIs 用于处理验证请求
+- `POST /apis/v1alpha1/users/-/send-verification-email`: Request a verification email.
+- `POST /apis/v1alpha1/users/-/verify-email`: Verify email with the code.
 
-- `POST /apis/v1alpha1/users/-/send-verification-email`：用于请求发送验证邮件来验证邮箱地址。
-- `POST /apis/v1alpha1/users/-/verify-email`：用于根据邮箱验证码来验证邮箱地址。
+Both endpoints require authentication and have a minimum 1-minute interval between requests to prevent abuse.
 
-以上两个 APIs 认证用户都可以访问，但会对请求进行限制，请求间隔不得小于 1 分钟，以防止滥用。
+The user profile API includes an `emailVerified` field.
 
-并且会在用户个人资料 API 中添加 emailVerified 字段，用于标识用户邮箱是否已验证。
+### Verification Email Template
 
-### 验证码邮件通知
+Variables available for custom templates:
 
-只会通过用户请求验证的邮箱地址发送验证邮件，并且提供了以下变量用户自定义通知模板：
+- **username**: The username requesting verification.
+- **code**: The verification code.
+- **expirationAtMinutes**: Code expiration time (in minutes).
 
-- **username**: 请求验证邮件地址的用户名。
-- **code**: 验证码。
-- **expirationAtMinutes**: 验证码过期时间（分钟）。
-
-验证邮件默认模板示例内容如下:
+Default template:
 
 ```markdown
-guqing 你好：
+Hello guqing:
 
-使用下面的动态验证码（OTP）验证您的电子邮件地址。
+Use the following one-time password (OTP) to verify your email address:
 
 277436
 
-动态验证码的有效期为 10 分钟。如果您没有尝试验证您的电子邮件地址，请忽略此电子邮件。
+This code expires in 10 minutes. If you did not request email verification, please ignore this message.
 
 guqing's blog
 ```
 
-### 安全和异常处理
+### Security and Error Handling
 
-- 确保所有敏感数据安全传输，当验证码不正确或过期时，只应该提示一个通用的错误信息防止用户猜测或爆破验证码。
-- 异常提示多语言支持。
+- All sensitive data must be transmitted securely. When codes are incorrect or expired, only a generic error message should be returned to prevent guessing or brute-forcing.
+- Multi-language support for error messages.
 
-## 结论
+## Conclusion
 
-通过实施上述方案，考虑到了以下情况：
+This design addresses the following scenarios:
 
-1. 新邮箱验证请求
-2. 用户邮箱地址更新
-3. 用户请求重新发送验证邮件
-4. 邮件发送失败
-5. 验证码有效期
-6. 发送频率限制
-7. 验证状态的指示和反馈
+1. New email verification requests
+2. Email address updates
+3. Re-sending verification emails
+4. Email send failures
+5. Verification code expiration
+6. Send frequency limits
+7. Verification status indication and feedback
 
-我们将能够提供一个安全、可靠且用户友好的邮箱验证功能。
+The result is a secure, reliable, and user-friendly email verification feature.

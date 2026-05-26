@@ -1,16 +1,16 @@
-# 项目结构
+# Project Structure
 
-此目录为 Halo 前端项目的根目录，包含 Console 和 User Center 两部分。
+This directory is the root of the Halo frontend project, containing both Console and User Center.
 
-## 名词解释
+## Terminology
 
-- Console：管理控制台，主要包含内容管理、系统管理、插件、主题等面向管理员的功能。
-- User Center：用户中心，主要面向单个用户。
+- Console: Admin panel for content management, system settings, plugins, themes, etc.
+- User Center: User-facing panel for individual users.
 
-## 目录结构
+## Directory Layout
 
 ```bash
-├── console-src                         # Console 部分的源码
+├── console-src                         # Console source code
 │   ├── composables
 │   ├── layouts
 │   ├── modules
@@ -20,11 +20,11 @@
 │   ├── views
 │   ├── App.vue
 │   └── main.ts
-├── packages                            # 公共库，会在 Halo 发布版本的时候发布到 npmjs.com
-│   ├── api-client                      # 根据 OpenAPI 生成的 API 客户端
-│   ├── components                      # 基础组件库
-│   └── shared                          # 共享库，主要提供给插件使用
-├── src                                 # Console 和 User Center 共享的源码
+├── packages                            # Shared libraries published to npmjs.com
+│   ├── api-client                      # OpenAPI-generated API client
+│   ├── components                      # Base component library
+│   └── shared                          # Shared library (mainly for plugins)
+├── src                                 # Shared code for Console and User Center
 │   ├── assets
 │   ├── components
 │   ├── constants
@@ -35,7 +35,7 @@
 │   ├── types
 │   ├── utils
 │   └── vite
-├── uc-src                              # User Center 部分的源码
+├── uc-src                              # User Center source code
 │   ├── router
 │   ├── App.vue
 │   └── main.ts
@@ -52,29 +52,29 @@
 ├── tsconfig.node.json
 ├── tsconfig.vitest.json
 ├── uc.html
-└── vite.config.ts                      # Console 和 User Center 共用的 Vite 配置
+└── vite.config.ts                      # Shared Vite config
 ```
 
-可以注意到 Console 和 User Center 仅仅只是使用源码目录和多页面入口进行区分，本质上还是同一个项目。
+Console and User Center share the same source directory and are differentiated only by multi-page entries. They are essentially the same project.
 
-## 开发环境访问方式
+## Development Access
 
-开发环境下只启动一个 Vite Dev Server，默认端口为 `3000`。
+In development, a single Vite Dev Server runs on port `3000`.
 
-开发时应通过后端访问：
+Access through the backend proxy:
 
 - `http://localhost:8090/console`
 - `http://localhost:8090/uc`
 
-这是因为后端在开发环境中会根据 `application/src/main/resources/application-dev.yaml` 中的 `halo.ui.proxy.*` 配置，将 `/console/**` 和 `/uc/**` 的 HTML 页面请求代理到 `http://localhost:3000/`。
+The backend proxies `/console/**` and `/uc/**` HTML page requests to `http://localhost:3000/` based on `halo.ui.proxy.*` in `application-dev.yaml`.
 
-不能直接使用 `http://localhost:3000/console` 或 `http://localhost:3000/uc` 访问页面，因为前端运行后发起的后端 API 请求会产生跨域问题。
+Do NOT access `http://localhost:3000/console` directly — API requests will have CORS issues.
 
-需要注意的是，开发环境下后端只代理页面入口，不代理静态资源路径。页面中的脚本和样式资源仍然由 Vite Dev Server 直接提供，但页面入口本身应始终从 Halo 后端地址进入。
+Note: In development, the backend only proxies page entry points, not static assets. Static scripts and styles are served directly by the Vite Dev Server.
 
-## 构建产物
+## Build Output
 
-构建时，Console 和 User Center 会通过多页面模式生成到同一个产物目录：
+Console and User Center are built into the same output directory via multi-page mode:
 
 ```bash
 build/dist/ui
@@ -83,8 +83,8 @@ build/dist/ui
 └── ui-assets/
 ```
 
-随后后端构建过程会将这些文件复制到应用资源目录，生产环境中的访问方式为：
+The backend build copies these files into the application's resource directory. In production:
 
-- `/console/**` 返回 `ui/console.html`
-- `/uc/**` 返回 `ui/uc.html`
-- `/ui-assets/**` 提供前端静态资源
+- `/console/**` serves `ui/console.html`
+- `/uc/**` serves `ui/uc.html`
+- `/ui-assets/**` serves frontend static assets

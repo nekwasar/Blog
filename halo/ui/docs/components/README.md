@@ -1,14 +1,14 @@
-# Console 组件介绍
+# Console Component Overview
 
-目前 Console 的组件包含基础组件（`@halo-dev/components`）和 Console 端的业务组件，这两种组件都可以在插件中使用。
+Console components include base components (`@halo-dev/components`) and Console-specific business components. Both can be used in plugins.
 
-## 业务组件
+## Business Components
 
 ### AnnotationsForm
 
-此组件用于为自定义模型设置 annotations 数据，同时支持自定义 key / value 和自定义表单，表单定义方式可以参考：<https://docs.halo.run/developer-guide/annotations-form>
+Used to set annotations data on custom models. Supports custom key/value pairs and custom forms. See: <https://docs.halo.run/developer-guide/annotations-form>
 
-使用方式：
+Usage:
 
 ```vue
 <script setup lang="ts">
@@ -28,12 +28,12 @@ async function handleSubmit () {
   const { customAnnotations, annotations, customFormInvalid, specFormInvalid } =
     annotationsFormRef.value || {};
 
-  // AnnotationsForm 中的表单校验失败时，不提交数据
+  // Skip submission if AnnotationsForm validation fails
   if (customFormInvalid || specFormInvalid) {
     return;
   }
 
-  // 合并数据，此对象即可最终设置给模型的 metadata.annotations
+  // Merge data — this object can be set as metadata.annotations
   const annotations = {
     ...annotations,
     ...customAnnotations,
@@ -51,4 +51,4 @@ async function handleSubmit () {
 </template>
 ```
 
-其中，kind 和 group 为必填项，分别表示模型的 kind 和 group。
+Both `kind` and `group` are required, representing the model's kind and group.

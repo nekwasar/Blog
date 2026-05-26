@@ -1,8 +1,8 @@
 # @halo-dev/api-client
 
-Halo 2.0 的 JavaScript API 客户端请求库。使用 [OpenAPI Generator](https://openapi-generator.tech/) 生成。
+Halo 2.0 JavaScript API client library. Generated using [OpenAPI Generator](https://openapi-generator.tech/).
 
-## 使用
+## Usage
 
 ```javascript
 import {
@@ -18,23 +18,23 @@ import {
 } from "@halo-dev/api-client";
 ```
 
-- **coreApiClient**: 为 Halo 所有自定义模型的 CRUD 接口封装的 api client。
-- **consoleApiClient**: 为 Halo 针对 Console 提供的接口封装的 api client。
-- **ucApiClient**: 为 Halo 针对 UC 提供的接口封装的 api client。
-- **publicApiClient**: 为 Halo 所有公开访问的接口封装的 api client。
-- **createCoreApiClient**: 用于创建自定义模型的 CRUD 接口封装的 api client，需要传入 axios 实例。
-- **createConsoleApiClient**: 用于创建 Console 接口封装的 api client，需要传入 axios 实例。
-- **createUcApiClient**: 用于创建 UC 接口封装的 api client，需要传入 axios 实例。
-- **createPublicApiClient**: 用于创建公开访问接口封装的 api client，需要传入 axios 实例。
-- **axiosInstance**: 内部默认创建的 axios 实例。
+- **coreApiClient**: CRUD API client for all Halo custom models.
+- **consoleApiClient**: API client for Console-specific endpoints.
+- **ucApiClient**: API client for User Center endpoints.
+- **publicApiClient**: API client for publicly accessible endpoints.
+- **createCoreApiClient**: Factory for custom model CRUD clients (requires axios instance).
+- **createConsoleApiClient**: Factory for Console API clients (requires axios instance).
+- **createUcApiClient**: Factory for UC API clients (requires axios instance).
+- **createPublicApiClient**: Factory for public API clients (requires axios instance).
+- **axiosInstance**: Default axios instance.
 
-### 在插件中使用
+### Usage in Plugins
 
 ```shell
 pnpm install @halo-dev/api-client axios
 ```
 
-由于已经在 Console 和 UC 项目中引入并设置好了 Axios 拦截器，所以直接使用即可：
+Since the Console and UC projects already include and configure Axios interceptors, just import directly:
 
 ```javascript
 import { coreApiClient } from "@halo-dev/api-client";
@@ -44,11 +44,11 @@ coreApiClient.content.post.listPost().then((response) => {
 });
 ```
 
-此外，在最新的 `@halo-dev/ui-plugin-bundler-kit@2.17.0` 中，已经排除了 `@halo-dev/api-client`、`axios` 依赖，所以最终产物中的相关依赖会自动使用 Halo 本身提供的依赖，无需关心最终产物大小。
+In `@halo-dev/ui-plugin-bundler-kit@2.17.0+`, `@halo-dev/api-client` and `axios` are externalized, so the final bundle automatically uses Halo's own dependencies — no need to worry about bundle size.
 
-详细文档可查阅：[插件开发 / API 请求](https://docs.halo.run/developer-guide/plugin/api-reference/ui/api-request)
+See: [Plugin Development / API Requests](https://docs.halo.run/developer-guide/plugin/api-reference/ui/api-request)
 
-### 在外部项目中使用
+### Usage in External Projects
 
 ```shell
 pnpm install @halo-dev/api-client axios

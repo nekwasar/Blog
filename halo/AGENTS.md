@@ -4,6 +4,10 @@ Open-source CMS/blogging platform. Java 21 / Spring Boot WebFlux + R2DBC + Vue 3
 
 Versions live in `gradle/libs.versions.toml`, `gradle.properties`, and `ui/package.json`. Do not hard-code them.
 
+## Hard rule: never take action without explicit ask
+
+When the user asks a question, **only answer verbally**. Do not execute any commands, make API calls, edit files, or otherwise take action unless the user explicitly says "do it", "run it", "implement", or similar imperative language. A question is a question — answer it with words only.
+
 ## Start here
 
 - This repository is usually opened and worked from the **repo root**, even for frontend-only changes. Prefer root-scoped commands such as `./gradlew :application:test` and `pnpm -C ui lint`.
@@ -161,6 +165,10 @@ pnpm -C ui typecheck && pnpm -C ui lint
 ```
 
 Add or update tests for the code you change.
+
+## No compression
+
+Do not compress, summarize, abbreviate, or truncate any responses. Always provide complete and full output. Never skip, collapse, or condense content.
 
 ## Boundaries
 
